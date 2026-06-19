@@ -42,7 +42,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         if (path.startsWith("/admin") && !"ADMIN".equals(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/user/jadwal");
+            response.sendRedirect(request.getContextPath() + "/user/schedule");
             return false;
         }
 

@@ -7,7 +7,7 @@
 <div class="container">
     <div class="page-header">
         <h1><i class="fa-solid fa-ticket"></i> My Bookings</h1>
-        <p>Hello, <strong th:text="${session.user.name}">User</strong> — here are all your trips.</p>
+        <p>Hello, <strong th:text="${session.user.name}">User</strong> - here are all your trips.</p>
     </div>
 
     <!-- Bookings List -->
@@ -16,7 +16,7 @@
         <div th:if="${#lists.isEmpty(myBookings)}" class="empty-card">
             <span class="empty-icon"><i class="fa-solid fa-ticket fa-3x"></i></span>
             <p>You don't have any bookings yet.</p>
-            <a th:href="@{/user/jadwal}" class="btn btn-primary">Find Bus Schedule</a>
+            <a th:href="@{/user/schedule}" class="btn btn-primary">Find Bus Schedule</a>
         </div>
 
         <div class="booking-list" th:if="${!#lists.isEmpty(myBookings)}">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="booking-card-footer" th:if="${bk.paymentStatus == 'PENDING'}">
-                    <a th:href="@{/user/bayar(bookingId=${bk.id})}" class="btn btn-primary btn-sm"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
+                    <a th:href="@{/user/payment(bookingId=${bk.id})}" class="btn btn-primary btn-sm"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
                 </div>
             </div>
         </div>

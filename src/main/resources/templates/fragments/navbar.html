@@ -3,7 +3,7 @@
 <head th:fragment="head(title)">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title th:text="${title} + ' — GoBus'">GoBus</title>
+    <title th:text="${title} + ' - GoBus'">GoBus</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
@@ -11,7 +11,7 @@
 <th:block th:fragment="navbar(user, unreadCount)">
 <nav class="navbar" id="main-navbar">
     <!-- Brand -->
-    <a th:href="${user != null and user.role == 'ADMIN'} ? '/admin/dashboard' : '/user/jadwal'"
+    <a th:href="${user != null and user.role == 'ADMIN'} ? '/admin/dashboard' : '/user/schedule'"
        class="brand-link" id="nav-brand">
         <span class="brand-icon"><i class="fa-solid fa-bus"></i></span>
         <span class="brand-text">Go<span class="brand-accent">Bus</span></span>
@@ -22,18 +22,18 @@
 
         <!-- USER links -->
         <div th:if="${user != null and user.role == 'USER'}" class="nav-group">
-            <a th:href="@{/user/jadwal}" class="nav-link" id="nav-schedule">
+            <a th:href="@{/user/schedule}" class="nav-link" id="nav-schedule">
                 <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
                 <span class="nav-label">Home</span>
                 <span class="nav-sublabel">Bus Schedule</span>
             </a>
-            <a th:href="@{/user/notifikasi}" class="nav-link notif-link" id="nav-notif">
+            <a th:href="@{/user/notifications}" class="nav-link notification-link" id="nav-notifications">
                 <span class="nav-icon"><i class="fa-solid fa-bell"></i></span>
                 <span class="nav-label">Notifications</span>
-                <span class="notif-badge"
+                <span class="notification-badge"
                       th:if="${unreadCount != null and unreadCount > 0}"
                       th:text="${unreadCount}"
-                      id="notif-badge">0</span>
+                      id="notification-badge">0</span>
             </a>
             <a th:href="@{/user/dashboard}" class="nav-link" id="nav-bookings">
                 <span class="nav-icon"><i class="fa-solid fa-ticket"></i></span>
@@ -51,11 +51,11 @@
                 <span class="nav-icon"><i class="fa-solid fa-bus"></i></span>
                 <span class="nav-label">Add Bus</span>
             </a>
-            <a th:href="@{/admin/jadwal/form}" class="nav-link" id="nav-admin-jadwal">
+            <a th:href="@{/admin/schedule/form}" class="nav-link" id="nav-admin-schedule">
                 <span class="nav-icon"><i class="fa-solid fa-calendar-plus"></i></span>
                 <span class="nav-label">Add Schedule</span>
             </a>
-            <a th:href="@{/admin/tiket}" class="nav-link" id="nav-admin-tiket">
+            <a th:href="@{/admin/trips}" class="nav-link" id="nav-admin-trip">
                 <span class="nav-icon"><i class="fa-solid fa-clipboard-list"></i></span>
                 <span class="nav-label">Check Trips</span>
             </a>
@@ -81,10 +81,10 @@
 <!-- Mobile slide-down menu -->
 <div class="mobile-menu" id="mobile-menu">
     <div th:if="${user != null and user.role == 'USER'}">
-        <a th:href="@{/user/jadwal}"      class="mobile-nav-link" id="m-nav-schedule"><i class="fa-solid fa-house"></i> Home — Bus Schedule</a>
-        <a th:href="@{/user/notifikasi}"  class="mobile-nav-link" id="m-nav-notif">
+        <a th:href="@{/user/schedule}"      class="mobile-nav-link" id="m-nav-schedule"><i class="fa-solid fa-house"></i> Home - Bus Schedule</a>
+        <a th:href="@{/user/notifications}"  class="mobile-nav-link" id="m-nav-notifications">
             <i class="fa-solid fa-bell"></i> Notifications
-            <span class="notif-badge"
+            <span class="notification-badge"
                   th:if="${unreadCount != null and unreadCount > 0}"
                   th:text="${unreadCount}">0</span>
         </a>
@@ -93,8 +93,8 @@
     <div th:if="${user != null and user.role == 'ADMIN'}">
         <a th:href="@{/admin/dashboard}"  class="mobile-nav-link" id="m-nav-admin-dash"><i class="fa-solid fa-chart-simple"></i> Dashboard</a>
         <a th:href="@{/admin/bus/form}"   class="mobile-nav-link" id="m-nav-admin-bus"><i class="fa-solid fa-bus"></i> Add Bus</a>
-        <a th:href="@{/admin/jadwal/form}"class="mobile-nav-link" id="m-nav-admin-jadwal"><i class="fa-solid fa-calendar-plus"></i> Add Schedule</a>
-        <a th:href="@{/admin/tiket}"      class="mobile-nav-link" id="m-nav-admin-tiket"><i class="fa-solid fa-clipboard-list"></i> Check Trips</a>
+        <a th:href="@{/admin/schedule/form}"class="mobile-nav-link" id="m-nav-admin-schedule"><i class="fa-solid fa-calendar-plus"></i> Add Schedule</a>
+        <a th:href="@{/admin/trips}"      class="mobile-nav-link" id="m-nav-admin-trip"><i class="fa-solid fa-clipboard-list"></i> Check Trips</a>
     </div>
     <div class="mobile-menu-footer" th:if="${user != null}">
         <span class="mobile-username" th:text="'Hi, ' + ${user.name}">Hi, User</span>

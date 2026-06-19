@@ -19,7 +19,7 @@
         <p>Select a schedule and book your seat now</p>
     </div>
 
-    <form th:action="@{/user/jadwal}" method="get" class="filter-card">
+    <form th:action="@{/user/schedule}" method="get" class="filter-card">
         <div class="filter-grid">
             <div class="form-group">
                 <label for="busName">Bus Name</label>
@@ -31,42 +31,42 @@
             </div>
             <div class="filter-actions">
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Filter</button>
-                <a th:href="@{/user/jadwal}" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</a>
+                <a th:href="@{/user/schedule}" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</a>
             </div>
         </div>
     </form>
 
-    <div th:if="${#lists.isEmpty(jadwalList)}" class="empty-card">
+    <div th:if="${#lists.isEmpty(scheduleList)}" class="empty-card">
         <span class="empty-icon"><i class="fa-solid fa-calendar-xmark fa-3x"></i></span>
         <p>No schedules available.</p>
     </div>
 
-    <div class="jadwal-grid" th:if="${!#lists.isEmpty(jadwalList)}">
-        <div class="jadwal-card" th:each="j : ${jadwalList}">
-            <div class="jadwal-card-header">
-                <span class="jadwal-brand" th:text="${j.busBrand}">Haryanto</span>
+    <div class="schedule-grid" th:if="${!#lists.isEmpty(scheduleList)}">
+        <div class="schedule-card" th:each="j : ${scheduleList}">
+            <div class="schedule-card-header">
+                <span class="schedule-brand" th:text="${j.busBrand}">Haryanto</span>
                 <span class="badge badge-info" th:text="${j.busPlateNumber}">B 1234 CD</span>
             </div>
-            <div class="jadwal-route">
+            <div class="schedule-route">
                 <span class="route-from" th:text="${#strings.substringBefore(j.route, ' - ')}">Jakarta</span>
                 <span class="route-arrow"><i class="fa-solid fa-arrow-right"></i></span>
                 <span class="route-to" th:text="${#strings.substringAfter(j.route, ' - ')}">Semarang</span>
             </div>
-            <div class="jadwal-details">
-                <div class="jadwal-detail-item">
+            <div class="schedule-details">
+                <div class="schedule-detail-item">
                     <span class="detail-icon"><i class="fa-solid fa-clock"></i></span>
                     <span th:text="${#temporals.format(j.departureTime, 'dd MMM yyyy, HH:mm')}">01 Jan 2025</span>
                 </div>
-                <div class="jadwal-detail-item">
+                <div class="schedule-detail-item">
                     <span class="detail-icon"><i class="fa-solid fa-chair"></i></span>
                     <span th:text="${j.busTotalSeats} + ' seats available'">40 seats available</span>
                 </div>
-                <div class="jadwal-detail-item">
+                <div class="schedule-detail-item">
                     <span class="detail-icon"><i class="fa-solid fa-money-bill-wave"></i></span>
                     <span class="price-tag" th:text="'Rp ' + ${#numbers.formatDecimal(j.price, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
                 </div>
             </div>
-            <div class="jadwal-card-footer">
+            <div class="schedule-card-footer">
                 <a th:href="@{/user/seat-map(scheduleId=${j.id})}" class="btn btn-primary btn-block">
                     Select Seat <i class="fa-solid fa-arrow-right"></i>
                 </a>

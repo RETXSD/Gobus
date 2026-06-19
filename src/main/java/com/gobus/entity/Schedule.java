@@ -3,7 +3,7 @@ package com.gobus.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Jadwal {
+public class Schedule {
     private Long id;
     private Long busId;
     private String route;
@@ -15,7 +15,7 @@ public class Jadwal {
     private String busPlateNumber;
     private int busTotalSeats;
 
-    public Jadwal() {}
+    public Schedule() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

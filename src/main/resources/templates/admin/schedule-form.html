@@ -8,14 +8,14 @@
 <div class="admin-main">
     <div class="page-header">
         <h1>
-            <i th:class="${jadwal.id != null} ? 'fa-solid fa-pen-to-square' : 'fa-solid fa-calendar-plus'"></i>
-            <span th:text="${jadwal.id != null} ? ' Edit Schedule' : ' Add Schedule'">Add Schedule</span>
+            <i th:class="${schedule.id != null} ? 'fa-solid fa-pen-to-square' : 'fa-solid fa-calendar-plus'"></i>
+            <span th:text="${schedule.id != null} ? ' Edit Schedule' : ' Add Schedule'">Add Schedule</span>
         </h1>
     </div>
 
     <div class="form-card">
-        <form th:action="@{/admin/jadwal/save}" method="post">
-            <input type="hidden" name="id" th:value="${jadwal.id}"/>
+        <form th:action="@{/admin/schedule/save}" method="post">
+            <input type="hidden" name="id" th:value="${schedule.id}"/>
 
             <div class="form-group">
                 <label for="busId">Bus Brand</label>
@@ -23,8 +23,8 @@
                     <option value="">-- Select Bus --</option>
                     <option th:each="bus : ${busList}"
                             th:value="${bus.id}"
-                            th:text="${bus.brand} + ' (' + ${bus.plateNumber} + ') — ' + ${bus.totalSeats} + ' seats'"
-                            th:selected="${jadwal.busId != null and jadwal.busId == bus.id}"
+                            th:text="${bus.brand} + ' (' + ${bus.plateNumber} + ') - ' + ${bus.totalSeats} + ' seats'"
+                            th:selected="${schedule.busId != null and schedule.busId == bus.id}"
                             th:data-brand="${bus.brand}"
                             th:data-plate="${bus.plateNumber}">
                     </option>
@@ -34,25 +34,25 @@
             <div class="form-group">
                 <label>Plate Info (automatic from bus selection)</label>
                 <input type="text" id="platInfo" readonly placeholder="Will fill automatically"
-                       th:value="${jadwal.busPlateNumber}"/>
+                       th:value="${schedule.busPlateNumber}"/>
             </div>
 
             <div class="form-group">
                 <label for="route">Travel Route</label>
-                <input type="text" id="route" name="route" th:value="${jadwal.route}"
+                <input type="text" id="route" name="route" th:value="${schedule.route}"
                        placeholder="e.g. Jakarta - Semarang" required/>
             </div>
 
             <div class="form-group">
                 <label for="departureTime">Departure Time</label>
                 <input type="datetime-local" id="departureTime" name="departureTime"
-                       th:value="${jadwal.departureTime != null} ? ${#temporals.format(jadwal.departureTime, 'yyyy-MM-dd''T''HH:mm')} : ''"
+                       th:value="${schedule.departureTime != null} ? ${#temporals.format(schedule.departureTime, 'yyyy-MM-dd''T''HH:mm')} : ''"
                        required/>
             </div>
 
             <div class="form-group">
                 <label for="price">Price (IDR)</label>
-                <input type="number" id="price" name="price" th:value="${jadwal.price}"
+                <input type="number" id="price" name="price" th:value="${schedule.price}"
                        min="0" step="1000" placeholder="e.g. 150000" required/>
             </div>
 
@@ -60,7 +60,7 @@
                 <a th:href="@{/admin/dashboard}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</a>
                 <button type="submit" class="btn btn-primary">
                     <i class="fa-solid fa-floppy-disk"></i>
-                    <span th:text="${jadwal.id != null} ? ' Update Schedule' : ' Save Schedule'">Save Schedule</span>
+                    <span th:text="${schedule.id != null} ? ' Update Schedule' : ' Save Schedule'">Save Schedule</span>
                 </button>
             </div>
         </form>

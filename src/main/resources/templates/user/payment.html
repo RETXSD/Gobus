@@ -84,10 +84,10 @@
                 This is a payment simulation. Click the button below to automatically complete the payment.
             </div>
 
-            <form th:action="@{/user/bayar/proses}" method="post">
+            <form th:action="@{/user/payment/process}" method="post">
                 <input type="hidden" name="bookingId" th:value="${booking.id}"/>
                 <button type="submit" class="btn btn-primary btn-block btn-pay">
-                    <i class="fa-solid fa-circle-check"></i> Pay Now — <span th:text="'Rp ' + ${#numbers.formatDecimal(totalPrice, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+                    <i class="fa-solid fa-circle-check"></i> Pay Now - <span th:text="'Rp ' + ${#numbers.formatDecimal(totalPrice, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
                 </button>
             </form>
             <a th:href="@{/user/dashboard}" class="btn btn-secondary btn-block" style="margin-top:0.75rem;">Pay Later</a>

@@ -1,6 +1,6 @@
 package com.gobus.dao;
 
-import com.gobus.entity.Notifikasi;
+import com.gobus.entity.Notification;
 import com.gobus.util.DBUtil;
 import org.springframework.stereotype.Repository;
 
@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class NotifikasiDAO {
+public class NotificationDAO {
 
     private final DBUtil dbUtil;
 
-    public NotifikasiDAO(DBUtil dbUtil) {
+    public NotificationDAO(DBUtil dbUtil) {
         this.dbUtil = dbUtil;
     }
 
-    public List<Notifikasi> findByUserId(Long userId) {
-        List<Notifikasi> list = new ArrayList<>();
+    public List<Notification> findByUserId(Long userId) {
+        List<Notification> list = new ArrayList<>();
         String sql = """
             SELECT n.*, bk.booking_code
             FROM notification n
@@ -61,7 +61,7 @@ public class NotifikasiDAO {
         }
     }
 
-    public void save(Notifikasi n) {
+    public void save(Notification n) {
         String sql = "INSERT INTO notification (user_id, booking_id, message, send_time, is_read) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = dbUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -90,8 +90,8 @@ public class NotifikasiDAO {
         return false;
     }
 
-    private Notifikasi mapRow(ResultSet rs) throws SQLException {
-        Notifikasi n = new Notifikasi();
+    private Notification mapRow(ResultSet rs) throws SQLException {
+        Notification n = new Notification();
         n.setId(rs.getLong("id"));
         n.setUserId(rs.getLong("user_id"));
         n.setBookingId(rs.getLong("booking_id"));

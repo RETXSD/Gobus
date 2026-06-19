@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="j, stat : ${jadwalList}">
+                <tr th:each="j, stat : ${scheduleList}">
                     <td th:text="${stat.index + 1}">1</td>
                     <td th:text="${j.busBrand}">Haryanto</td>
                     <td><span class="badge badge-info" th:text="${j.busPlateNumber}">B 123</span></td>
@@ -38,7 +38,7 @@
                     </td>
                     <td th:text="${j.busTotalSeats}">40</td>
                     <td class="action-cell">
-                        <a th:if="${!j.departureTime.isBefore(now)}" th:href="@{/admin/tiket/detail(scheduleId=${j.id})}" class="btn btn-sm btn-primary">
+                        <a th:if="${!j.departureTime.isBefore(now)}" th:href="@{/admin/trips/detail(scheduleId=${j.id})}" class="btn btn-sm btn-primary">
                             <i class="fa-solid fa-magnifying-glass"></i> Check Details
                         </a>
                         <button th:if="${j.departureTime.isBefore(now)}"
@@ -49,7 +49,7 @@
                         </button>
                     </td>
                 </tr>
-                <tr th:if="${#lists.isEmpty(jadwalList)}">
+                <tr th:if="${#lists.isEmpty(scheduleList)}">
                     <td colspan="8" class="empty-state">No schedules available.</td>
                 </tr>
             </tbody>

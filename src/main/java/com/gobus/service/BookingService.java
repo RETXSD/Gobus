@@ -1,9 +1,9 @@
 package com.gobus.service;
 
 import com.gobus.dao.BookingDAO;
-import com.gobus.dao.JadwalDAO;
+import com.gobus.dao.ScheduleDAO;
 import com.gobus.entity.Booking;
-import com.gobus.entity.Jadwal;
+import com.gobus.entity.Schedule;
 import com.gobus.observer.BookingEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,12 @@ import java.util.Random;
 public class BookingService {
 
     private final BookingDAO bookingDAO;
-    private final JadwalDAO jadwalDAO;
+    private final ScheduleDAO scheduleDAO;
     private final BookingEventPublisher bookingEventPublisher;
 
-    public BookingService(BookingDAO bookingDAO, JadwalDAO jadwalDAO, BookingEventPublisher bookingEventPublisher) {
+    public BookingService(BookingDAO bookingDAO, ScheduleDAO scheduleDAO, BookingEventPublisher bookingEventPublisher) {
         this.bookingDAO = bookingDAO;
-        this.jadwalDAO = jadwalDAO;
+        this.scheduleDAO = scheduleDAO;
         this.bookingEventPublisher = bookingEventPublisher;
     }
 
@@ -87,10 +87,10 @@ public class BookingService {
     }
 
     private Long createSingleBooking(Long userId, Long scheduleId, int seatNumber) {
-        Jadwal jadwal = jadwalDAO.findById(scheduleId);
-        if (jadwal == null) throw new RuntimeException("Schedule not found");
+        Schedule schedule = scheduleDAO.findById(scheduleId);
+        if (schedule == null) throw new RuntimeException("Schedule not found");
 
-        String brand = jadwal.getBusBrand().substring(0, Math.min(3, jadwal.getBusBrand().length())).toUpperCase();
+        String brand = schedule.getBusBrand().substring(0, Math.min(3, schedule.getBusBrand().length())).toUpperCase();
         String seat = String.format("%02d", seatNumber);
         String random = String.format("%04d", new Random().nextInt(10000));
         String bookingCode = "GB-" + brand + seat + "-" + random;

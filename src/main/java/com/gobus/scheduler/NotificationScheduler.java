@@ -2,8 +2,8 @@ package com.gobus.scheduler;
 
 import com.gobus.dao.BookingDAO;
 import com.gobus.entity.Booking;
-import com.gobus.entity.Notifikasi;
-import com.gobus.service.NotifikasiService;
+import com.gobus.entity.Notification;
+import com.gobus.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,17 +13,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-public class NotifikasiScheduler {
+public class NotificationScheduler {
 
-    private static final Logger log = LoggerFactory.getLogger(NotifikasiScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(NotificationScheduler.class);
 
     private final BookingDAO bookingDAO;
-    private final NotifikasiService notifikasiService;
+    private final NotificationService notificationService;
     private final List<ReminderStrategy> reminderStrategies;
 
-    public NotifikasiScheduler(BookingDAO bookingDAO, NotifikasiService notifikasiService) {
+    public NotificationScheduler(BookingDAO bookingDAO, NotificationService notificationService) {
         this.bookingDAO = bookingDAO;
-        this.notifikasiService = notifikasiService;
+        this.notificationService = notificationService;
         this.reminderStrategies = List.of(
                 new ThreeDayReminderStrategy(),
                 new OneDayReminderStrategy(),
@@ -52,14 +52,14 @@ public class NotifikasiScheduler {
                     + " | Route: " + booking.getRoute()
                     + " | Seats: " + booking.getSeatNumbersText();
 
-            if (!notifikasiService.existsByBookingIdAndMessage(booking.getId(), message)) {
-                Notifikasi notif = new Notifikasi();
-                notif.setUserId(booking.getUserId());
-                notif.setBookingId(booking.getId());
-                notif.setMessage(message);
-                notif.setSendTime(LocalDateTime.now());
-                notif.setRead(false);
-                notifikasiService.save(notif);
+            if (!notificationService.existsByBookingIdAndMessage(booking.getId(), message)) {
+                Notification notification = new Notification();
+                notification.setUserId(booking.getUserId());
+                notification.setBookingId(booking.getId());
+                notification.setMessage(message);
+                notification.setSendTime(LocalDateTime.now());
+                notification.setRead(false);
+                notificationService.save(notification);
                 log.info("[Scheduler] Notification sent for booking {} user {}", booking.getBookingCode(), booking.getUserId());
             }
         }

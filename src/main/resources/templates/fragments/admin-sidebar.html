@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<!-- ── Shared <head> for admin (reuse same head fragment) ── -->
+<!-- -- Shared <head> for admin (reuse same head fragment) -- -->
 <head th:fragment="admin-head(title)">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title th:text="${title} + ' — GoBus Admin'">GoBus Admin</title>
+    <title th:text="${title} + ' - GoBus Admin'">GoBus Admin</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 
-<!-- ── Admin Sidebar ── -->
+<!-- -- Admin Sidebar -- -->
 <th:block th:fragment="sidebar(user)">
 <aside class="admin-sidebar" id="admin-sidebar">
 
@@ -35,11 +35,11 @@
             <span class="sidebar-link-icon"><i class="fa-solid fa-bus"></i></span>
             <span>Add Bus</span>
         </a>
-        <a th:href="@{/admin/jadwal/form}" class="sidebar-link" id="sl-jadwal">
+        <a th:href="@{/admin/schedule/form}" class="sidebar-link" id="sl-schedule">
             <span class="sidebar-link-icon"><i class="fa-solid fa-calendar-plus"></i></span>
             <span>Add Schedule</span>
         </a>
-        <a th:href="@{/admin/tiket}" class="sidebar-link" id="sl-tiket">
+        <a th:href="@{/admin/trips}" class="sidebar-link" id="sl-trip">
             <span class="sidebar-link-icon"><i class="fa-solid fa-ticket"></i></span>
             <span>Check Trips</span>
         </a>

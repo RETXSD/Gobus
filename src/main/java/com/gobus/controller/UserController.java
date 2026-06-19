@@ -1,12 +1,12 @@
 package com.gobus.controller;
 
 import com.gobus.entity.Booking;
-import com.gobus.entity.Jadwal;
-import com.gobus.entity.Notifikasi;
+import com.gobus.entity.Schedule;
+import com.gobus.entity.Notification;
 import com.gobus.entity.User;
 import com.gobus.service.BookingService;
-import com.gobus.service.JadwalService;
-import com.gobus.service.NotifikasiService;
+import com.gobus.service.ScheduleService;
+import com.gobus.service.NotificationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,14 +21,14 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    private final JadwalService jadwalService;
+    private final ScheduleService scheduleService;
     private final BookingService bookingService;
-    private final NotifikasiService notifikasiService;
+    private final NotificationService notificationService;
 
-    public UserController(JadwalService jadwalService, BookingService bookingService, NotifikasiService notifikasiService) {
-        this.jadwalService = jadwalService;
+    public UserController(ScheduleService scheduleService, BookingService bookingService, NotificationService notificationService) {
+        this.scheduleService = scheduleService;
         this.bookingService = bookingService;
-        this.notifikasiService = notifikasiService;
+        this.notificationService = notificationService;
     }
 
     private User requireUser(HttpSession session) {
@@ -44,26 +44,26 @@ public class UserController {
         User user = requireUser(session);
         if (user == null) return "redirect:/login";
         List<Booking> myBookings = bookingService.findByUserId(user.getId());
-        long unread = notifikasiService.countUnread(user.getId());
+        long unread = notificationService.countUnread(user.getId());
         model.addAttribute("myBookings", myBookings);
         model.addAttribute("unreadCount", unread);
         return "user/dashboard";
     }
 
-    // ==================== JADWAL ====================
+    // ==================== SCHEDULE ====================
 
-    @GetMapping("/jadwal")
-    public String jadwalList(@RequestParam(required = false) String busName,
+    @GetMapping("/schedule")
+    public String scheduleList(@RequestParam(required = false) String busName,
                              @RequestParam(required = false) String destination,
                              HttpSession session,
                              Model model) {
         User user = requireUser(session);
         if (user == null) return "redirect:/login";
-        model.addAttribute("jadwalList", jadwalService.search(busName, destination));
+        model.addAttribute("scheduleList", scheduleService.search(busName, destination));
         model.addAttribute("busName", busName);
         model.addAttribute("destination", destination);
-        model.addAttribute("unreadCount", notifikasiService.countUnread(user.getId()));
-        return "user/jadwal-list";
+        model.addAttribute("unreadCount", notificationService.countUnread(user.getId()));
+        return "user/schedule-list";
     }
 
     // ==================== SEAT MAP ====================
@@ -72,12 +72,12 @@ public class UserController {
     public String seatMap(@RequestParam Long scheduleId, HttpSession session, Model model) {
         User user = requireUser(session);
         if (user == null) return "redirect:/login";
-        Jadwal jadwal = jadwalService.findById(scheduleId);
-        if (jadwal == null) return "redirect:/user/jadwal";
+        Schedule schedule = scheduleService.findById(scheduleId);
+        if (schedule == null) return "redirect:/user/schedule";
         List<Integer> bookedSeats = bookingService.getBookedSeats(scheduleId);
-        model.addAttribute("jadwal", jadwal);
+        model.addAttribute("schedule", schedule);
         model.addAttribute("bookedSeats", bookedSeats);
-        model.addAttribute("unreadCount", notifikasiService.countUnread(user.getId()));
+        model.addAttribute("unreadCount", notificationService.countUnread(user.getId()));
         return "user/seat-map";
     }
 
@@ -93,47 +93,47 @@ public class UserController {
         try {
             List<Integer> selectedSeats = parseSeatNumbers(seatNumbers);
             List<Long> bookingIds = bookingService.createBookings(user.getId(), scheduleId, selectedSeats);
-            return "redirect:/user/bayar?bookingId=" + bookingIds.get(0);
+            return "redirect:/user/payment?bookingId=" + bookingIds.get(0);
         } catch (Exception e) {
             ra.addFlashAttribute("error", "Failed to create booking: " + e.getMessage());
             return "redirect:/user/seat-map?scheduleId=" + scheduleId;
         }
     }
 
-    // ==================== BAYAR ====================
+    // ==================== PAYMENT ====================
 
-    @GetMapping("/bayar")
-    public String bayarPage(@RequestParam Long bookingId, HttpSession session, Model model) {
+    @GetMapping("/payment")
+    public String paymentPage(@RequestParam Long bookingId, HttpSession session, Model model) {
         User user = requireUser(session);
         if (user == null) return "redirect:/login";
         Booking booking = bookingService.findById(bookingId);
         if (booking == null || !booking.getUserId().equals(user.getId())) return "redirect:/user/dashboard";
-        if ("PAID".equals(booking.getPaymentStatus())) return "redirect:/user/booking-sukses?bookingId=" + bookingId;
+        if ("PAID".equals(booking.getPaymentStatus())) return "redirect:/user/booking-success?bookingId=" + bookingId;
         List<Booking> bookingGroup = bookingService.findBookingGroup(bookingId);
         model.addAttribute("booking", booking);
         model.addAttribute("bookingGroup", bookingGroup);
         model.addAttribute("totalPrice", calculateTotalPrice(bookingGroup));
-        model.addAttribute("unreadCount", notifikasiService.countUnread(user.getId()));
-        return "user/bayar";
+        model.addAttribute("unreadCount", notificationService.countUnread(user.getId()));
+        return "user/payment";
     }
 
-    @PostMapping("/bayar/proses")
-    public String prosesBayar(@RequestParam Long bookingId, HttpSession session, RedirectAttributes ra) {
+    @PostMapping("/payment/process")
+    public String processPayment(@RequestParam Long bookingId, HttpSession session, RedirectAttributes ra) {
         User user = requireUser(session);
         if (user == null) return "redirect:/login";
         try {
             bookingService.pay(bookingId);
-            return "redirect:/user/booking-sukses?bookingId=" + bookingId;
+            return "redirect:/user/booking-success?bookingId=" + bookingId;
         } catch (Exception e) {
             ra.addFlashAttribute("error", "Failed to process payment: " + e.getMessage());
-            return "redirect:/user/bayar?bookingId=" + bookingId;
+            return "redirect:/user/payment?bookingId=" + bookingId;
         }
     }
 
     // ==================== BOOKING SUCCESS ====================
 
-    @GetMapping("/booking-sukses")
-    public String bookingSukses(@RequestParam Long bookingId, HttpSession session, Model model) {
+    @GetMapping("/booking-success")
+    public String bookingSuccess(@RequestParam Long bookingId, HttpSession session, Model model) {
         User user = requireUser(session);
         if (user == null) return "redirect:/login";
         Booking booking = bookingService.findById(bookingId);
@@ -142,31 +142,31 @@ public class UserController {
         model.addAttribute("booking", booking);
         model.addAttribute("bookingGroup", bookingGroup);
         model.addAttribute("totalPrice", calculateTotalPrice(bookingGroup));
-        model.addAttribute("unreadCount", notifikasiService.countUnread(user.getId()));
-        return "user/booking-sukses";
+        model.addAttribute("unreadCount", notificationService.countUnread(user.getId()));
+        return "user/booking-success";
     }
 
-    // ==================== NOTIFIKASI ====================
+    // ==================== NOTIFICATIONS ====================
 
-    @GetMapping("/notifikasi")
-    public String notifikasiPage(HttpSession session, Model model) {
+    @GetMapping("/notifications")
+    public String notificationPage(HttpSession session, Model model) {
         User user = requireUser(session);
         if (user == null) return "redirect:/login";
-        notifikasiService.markAllRead(user.getId());
-        List<Notifikasi> notifList = notifikasiService.findByUserId(user.getId());
-        model.addAttribute("notifList", notifList);
+        notificationService.markAllRead(user.getId());
+        List<Notification> notificationList = notificationService.findByUserId(user.getId());
+        model.addAttribute("notificationList", notificationList);
         model.addAttribute("unreadCount", 0L);
-        return "user/notifikasi";
+        return "user/notifications";
     }
 
-    // ==================== NOTIFIKASI COUNT (AJAX) ====================
+    // ==================== NOTIFICATION COUNT (AJAX) ====================
 
-    @GetMapping("/notifikasi/count")
+    @GetMapping("/notifications/count")
     @ResponseBody
-    public long notifCount(HttpSession session) {
+    public long notificationCount(HttpSession session) {
         User user = requireUser(session);
         if (user == null) return 0;
-        return notifikasiService.countUnread(user.getId());
+        return notificationService.countUnread(user.getId());
     }
 
     private List<Integer> parseSeatNumbers(String seatNumbers) {

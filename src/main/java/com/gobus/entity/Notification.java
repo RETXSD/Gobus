@@ -2,7 +2,7 @@ package com.gobus.entity;
 
 import java.time.LocalDateTime;
 
-public class Notifikasi {
+public class Notification {
     private Long id;
     private Long userId;
     private Long bookingId;
@@ -13,7 +13,7 @@ public class Notifikasi {
     // Joined fields
     private String bookingCode;
 
-    public Notifikasi() {}
+    public Notification() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

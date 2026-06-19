@@ -1,8 +1,8 @@
 package com.gobus.observer;
 
-import com.gobus.dao.NotifikasiDAO;
+import com.gobus.dao.NotificationDAO;
 import com.gobus.entity.Booking;
-import com.gobus.entity.Notifikasi;
+import com.gobus.entity.Notification;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -10,22 +10,22 @@ import java.time.LocalDateTime;
 @Component
 public class PaymentNotificationObserver implements BookingEventListener {
 
-    private final NotifikasiDAO notifikasiDAO;
+    private final NotificationDAO notificationDAO;
 
-    public PaymentNotificationObserver(NotifikasiDAO notifikasiDAO) {
-        this.notifikasiDAO = notifikasiDAO;
+    public PaymentNotificationObserver(NotificationDAO notificationDAO) {
+        this.notificationDAO = notificationDAO;
     }
 
     @Override
     public void onPaymentSuccess(Booking booking) {
-        Notifikasi notif = new Notifikasi();
-        notif.setUserId(booking.getUserId());
-        notif.setBookingId(booking.getId());
-        notif.setMessage("Payment successful! Your booking code: " + booking.getBookingCode()
+        Notification notification = new Notification();
+        notification.setUserId(booking.getUserId());
+        notification.setBookingId(booking.getId());
+        notification.setMessage("Payment successful! Your booking code: " + booking.getBookingCode()
                 + " | Seats " + booking.getSeatNumbersText()
                 + " | Route: " + booking.getRoute());
-        notif.setSendTime(LocalDateTime.now());
-        notif.setRead(false);
-        notifikasiDAO.save(notif);
+        notification.setSendTime(LocalDateTime.now());
+        notification.setRead(false);
+        notificationDAO.save(notification);
     }
 }

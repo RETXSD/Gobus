@@ -15,23 +15,23 @@
         <div class="info-grid">
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-bus"></i> Bus Brand</span>
-                <span class="info-value" th:text="${jadwal.busBrand}">Haryanto</span>
+                <span class="info-value" th:text="${schedule.busBrand}">Haryanto</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-barcode"></i> Plate Number</span>
-                <span class="info-value badge badge-info" th:text="${jadwal.busPlateNumber}">B 1234 CD</span>
+                <span class="info-value badge badge-info" th:text="${schedule.busPlateNumber}">B 1234 CD</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-route"></i> Route</span>
-                <span class="info-value" th:text="${jadwal.route}">Jakarta - Semarang</span>
+                <span class="info-value" th:text="${schedule.route}">Jakarta - Semarang</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-clock"></i> Departure</span>
-                <span class="info-value" th:text="${#temporals.format(jadwal.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span>
+                <span class="info-value" th:text="${#temporals.format(schedule.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-chair"></i> Total Seats</span>
-                <span class="info-value" th:text="${jadwal.busTotalSeats}">40</span>
+                <span class="info-value" th:text="${schedule.busTotalSeats}">40</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-ticket"></i> Occupied Seats</span>
@@ -48,7 +48,7 @@
             <span class="legend-item"><span class="seat-dot seat-booked"></span> Occupied</span>
         </div>
         <div class="seat-grid-admin" th:with="bookedNums=${#sets.toSet(bookedSeatNumbers)}">
-            <div th:each="i : ${#numbers.sequence(1, jadwal.busTotalSeats)}"
+            <div th:each="i : ${#numbers.sequence(1, schedule.busTotalSeats)}"
                  th:class="${bookedNums.contains(i)} ? 'seat-admin seat-admin-booked' : 'seat-admin seat-admin-free'"
                  th:text="${i}">1</div>
         </div>
@@ -57,8 +57,8 @@
     <!-- Passenger List -->
     <div class="section">
         <h2><i class="fa-solid fa-users"></i> Passenger List</h2>
-        <form th:action="@{/admin/tiket/detail}" method="get" class="filter-card compact-filter">
-            <input type="hidden" name="scheduleId" th:value="${jadwal.id}"/>
+        <form th:action="@{/admin/trips/detail}" method="get" class="filter-card compact-filter">
+            <input type="hidden" name="scheduleId" th:value="${schedule.id}"/>
             <div class="filter-grid">
                 <div class="form-group">
                     <label for="bookingCode">Booking Code</label>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="filter-actions">
                     <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-                    <a th:href="@{/admin/tiket/detail(scheduleId=${jadwal.id})}" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</a>
+                    <a th:href="@{/admin/trips/detail(scheduleId=${schedule.id})}" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</a>
                 </div>
             </div>
         </form>
@@ -105,7 +105,7 @@
     </div>
 
     <div class="form-actions">
-        <a th:href="@{/admin/tiket}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Trips</a>
+        <a th:href="@{/admin/trips}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Trips</a>
     </div>
 </div>
 </body>

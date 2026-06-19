@@ -1,16 +1,16 @@
 /* ============================================
-   GoBus — Premium Neubrutalist Stylesheet
+   GoBus - Premium Neubrutalist Stylesheet
    ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Sora:wght@700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-/* ── CSS Variables ── */
+/* -- CSS Variables -- */
 :root {
     /* Brand Colors */
     --primary:       #D4A017;   /* premium gold */
     --primary-dark:  #A07810;
     --primary-light: rgba(212, 160, 23, 0.12);
-    --navy:          #0A1F3C;   /* deep navy — dominant dark */
+    --navy:          #0A1F3C;   /* deep navy - dominant dark */
     --blue:          #1A5EBF;   /* secondary blue */
     --blue-light:    #2D7DED;   /* vibrant accent blue */
     
@@ -43,7 +43,7 @@
     --navbar-h:      68px;
 }
 
-/* ── Reset & Global ── */
+/* -- Reset & Global -- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -65,7 +65,7 @@ button, input, select, textarea { min-width: 0; }
 
 code, .mono { font-family: 'JetBrains Mono', monospace; }
 
-/* ── Navbar ── */
+/* -- Navbar -- */
 .navbar {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -137,10 +137,10 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 .nav-link.active .nav-sublabel { color: rgba(212,160,23,.7); }
 
 /* Notification link special */
-.notif-link { flex-direction: row; align-items: center; gap: 0.45rem; min-width: auto; }
-.notif-link .nav-label { margin-top: 0; }
+.notification-link { flex-direction: row; align-items: center; gap: 0.45rem; min-width: auto; }
+.notification-link .nav-label { margin-top: 0; }
 
-.notif-badge {
+.notification-badge {
     background: var(--primary);
     color: var(--navy);
     font-size: 0.7rem;
@@ -279,7 +279,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 }
 .mobile-username { font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,.55); }
 
-/* ── Admin Sidebar ── */
+/* -- Admin Sidebar -- */
 :root { --sidebar-w: 240px; }
 
 /* Admin pages: body uses sidebar layout, no top padding */
@@ -475,7 +475,7 @@ body.admin-body {
     .admin-main { padding: 1.5rem 1rem 1.5rem 3.5rem; }
 }
 
-/* ── Container ── */
+/* -- Container -- */
 .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -488,7 +488,7 @@ body.admin-body {
 }
 
 
-/* ── Page Header ── */
+/* -- Page Header -- */
 .page-header {
     margin-bottom: 2.5rem;
 }
@@ -502,7 +502,7 @@ body.admin-body {
 }
 .page-header p { color: var(--text-muted); margin-top: 0.35rem; font-weight: 500; }
 
-/* ── Hero Banner ── */
+/* -- Hero Banner -- */
 .hero-banner {
     position: relative;
     display: grid;
@@ -586,7 +586,7 @@ body.admin-body {
     pointer-events: none;
 }
 
-/* ── Buttons ── */
+/* -- Buttons -- */
 .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     padding: 0.75rem 1.5rem;
@@ -665,7 +665,7 @@ body.admin-body {
 .btn-pay:hover { transform: translate(-2px, -2px); box-shadow: var(--nb-shadow-lg); }
 .btn-pay:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--border); }
 
-/* ── Alerts ── */
+/* -- Alerts -- */
 .alert {
     padding: 1rem 1.25rem;
     border-radius: var(--radius-sm);
@@ -679,7 +679,7 @@ body.admin-body {
 .alert-success { background: var(--success-light); color: var(--success); border-color: var(--success); }
 .ajax-login-message[hidden] { display: none; }
 
-/* ── Badges ── */
+/* -- Badges -- */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -698,7 +698,7 @@ body.admin-body {
 .badge-danger  { background: var(--danger-light);  color: var(--danger); border-color: var(--danger); }
 .badge-info    { background: var(--info-light);    color: var(--info); border-color: var(--info); }
 
-/* ── Tables ── */
+/* -- Tables -- */
 .table-wrapper {
     overflow-x: auto;
     max-width: 100%;
@@ -737,7 +737,7 @@ body.admin-body {
 .action-cell { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 .empty-state { text-align: center; padding: 3rem 2rem; color: var(--text-muted); font-weight: 600; }
 
-/* ── Section ── */
+/* -- Section -- */
 .section { margin-top: 2.5rem; }
 .section-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -746,7 +746,7 @@ body.admin-body {
 .section-header h2 { font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; }
 .section-desc { color: var(--text-muted); font-size: 0.9rem; }
 
-/* ── Stats Grid ── */
+/* -- Stats Grid -- */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -772,7 +772,7 @@ body.admin-body {
 }
 .stat-label { color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-top: 0.35rem; }
 
-/* ── Form Card ── */
+/* -- Form Card -- */
 .form-card {
     background: var(--surface);
     border: var(--nb-border);
@@ -865,7 +865,7 @@ body.admin-body {
     flex-wrap: wrap;
 }
 
-/* ── Auth ── */
+/* -- Auth -- */
 .auth-body {
     display: flex; align-items: center; justify-content: center;
     min-height: 100vh; padding: 2rem;
@@ -893,7 +893,7 @@ body.admin-body {
 .auth-form .form-group { margin-bottom: 1.25rem; }
 .auth-footer { text-align: center; font-size: 0.875rem; color: var(--text-muted); margin-top: 2rem; font-weight: 600; }
 
-/* ── Quick Actions ── */
+/* -- Quick Actions -- */
 .quick-actions {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -921,7 +921,7 @@ body.admin-body {
 .quick-icon  { font-size: 2.25rem; }
 .quick-label { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 0.875rem; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
 
-/* ── Booking Cards ── */
+/* -- Booking Cards -- */
 .booking-list { display: flex; flex-direction: column; gap: 1.25rem; }
 .booking-card {
     background: var(--surface);
@@ -944,13 +944,13 @@ body.admin-body {
 .booking-info-row span:first-child { color: var(--text-muted); }
 .booking-card-footer { padding: 1rem 1.5rem; background: var(--bg); border-top: var(--nb-border); }
 
-/* ── Jadwal Cards ── */
-.jadwal-grid {
+/* -- Schedule Cards -- */
+.schedule-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
 }
-.jadwal-card {
+.schedule-card {
     background: var(--surface);
     border: var(--nb-border);
     border-radius: var(--radius);
@@ -959,17 +959,17 @@ body.admin-body {
     display: flex; flex-direction: column;
     transition: transform 100ms, box-shadow 100ms;
 }
-.jadwal-card:hover { transform: translate(-4px, -4px); box-shadow: var(--nb-shadow-lg); }
-.jadwal-card-header {
+.schedule-card:hover { transform: translate(-4px, -4px); box-shadow: var(--nb-shadow-lg); }
+.schedule-card-header {
     padding: 1.25rem;
     background: var(--navy);
     color: var(--surface);
     display: flex; align-items: center; justify-content: space-between;
     border-bottom: var(--nb-border);
 }
-.jadwal-brand { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; color: var(--primary); }
-.jadwal-card-header .badge { background: rgba(255,255,255,.15); color: var(--primary); border-color: var(--primary); }
-.jadwal-route {
+.schedule-brand { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; color: var(--primary); }
+.schedule-card-header .badge { background: rgba(255,255,255,.15); color: var(--primary); border-color: var(--primary); }
+.schedule-route {
     display: flex; align-items: center; justify-content: center;
     gap: 0.85rem;
     padding: 1.5rem 1.25rem;
@@ -977,8 +977,8 @@ body.admin-body {
 }
 .route-from, .route-to { color: var(--navy); font-family: 'Sora', sans-serif; }
 .route-arrow { color: var(--blue-light); font-size: 1.35rem; }
-.jadwal-details { padding: 0 1.25rem 1.25rem; display: flex; flex-direction: column; gap: 0.65rem; }
-.jadwal-detail-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.875rem; color: var(--text-muted); font-weight: 600; }
+.schedule-details { padding: 0 1.25rem 1.25rem; display: flex; flex-direction: column; gap: 0.65rem; }
+.schedule-detail-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.875rem; color: var(--text-muted); font-weight: 600; }
 .detail-icon { font-size: 1.1rem; }
 .price-tag {
     font-weight: 800;
@@ -986,9 +986,9 @@ body.admin-body {
     background: linear-gradient(90deg, var(--primary-dark), var(--primary));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.jadwal-card-footer { padding: 1.25rem; border-top: var(--nb-border); background: var(--bg); }
+.schedule-card-footer { padding: 1.25rem; border-top: var(--nb-border); background: var(--bg); }
 
-/* ── Info Card ── */
+/* -- Info Card -- */
 .info-card {
     background: var(--surface);
     border: var(--nb-border);
@@ -1002,7 +1002,7 @@ body.admin-body {
 .info-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
 .info-value { font-size: 1rem; font-weight: 700; color: var(--navy); }
 
-/* ── Seat Map ── */
+/* -- Seat Map -- */
 .seat-legend {
     display: flex; gap: 1.5rem; align-items: center;
     margin-bottom: 1.5rem; flex-wrap: wrap;
@@ -1117,7 +1117,7 @@ body.admin-body {
 .seat-admin-free   { background: #dcfce7; color: #155724; border-color: #86efac; }
 .seat-admin-booked { background: #fee2e2; color: #721c24; border-color: #fca5a5; }
 
-/* ── Payment Page ── */
+/* -- Payment Page -- */
 .payment-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1183,7 +1183,7 @@ body.admin-body {
     font-weight: 600;
 }
 
-/* ── Booking Success / Ticket ── */
+/* -- Booking Success / Ticket -- */
 .success-container {
     max-width: 520px;
     margin: 3rem auto;
@@ -1274,7 +1274,7 @@ body.admin-body {
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-.notif-reminder {
+.notification-reminder {
     background: var(--warning-light);
     border: var(--nb-border);
     box-shadow: var(--nb-shadow);
@@ -1288,9 +1288,9 @@ body.admin-body {
 }
 .success-actions { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; }
 
-/* ── Notifikasi ── */
-.notif-list { display: flex; flex-direction: column; gap: 0.85rem; }
-.notif-item {
+/* -- Notification -- */
+.notification-list { display: flex; flex-direction: column; gap: 0.85rem; }
+.notification-item {
     background: var(--surface);
     border: var(--nb-border);
     border-radius: var(--radius);
@@ -1299,10 +1299,10 @@ body.admin-body {
     transition: transform 100ms, box-shadow 100ms;
     box-shadow: var(--nb-shadow);
 }
-.notif-item:hover { transform: translate(-2px, -2px); box-shadow: var(--nb-shadow-lg); }
-.notif-unread { border-left: 6px solid var(--primary); }
-.notif-read   { border-left: 6px solid rgba(10,31,60,0.15); opacity: .75; }
-.notif-dot {
+.notification-item:hover { transform: translate(-2px, -2px); box-shadow: var(--nb-shadow-lg); }
+.notification-unread { border-left: 6px solid var(--primary); }
+.notification-read   { border-left: 6px solid rgba(10,31,60,0.15); opacity: .75; }
+.notification-dot {
     width: 0.65rem; height: 0.65rem;
     background: var(--primary);
     border-radius: 50%;
@@ -1310,11 +1310,11 @@ body.admin-body {
     flex-shrink: 0;
     border: 1.5px solid var(--navy);
 }
-.notif-content { flex: 1; }
-.notif-message { font-size: 0.9rem; line-height: 1.5; font-weight: 600; color: var(--navy); }
-.notif-time { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-top: 0.45rem; display: block; }
+.notification-content { flex: 1; }
+.notification-message { font-size: 0.9rem; line-height: 1.5; font-weight: 600; color: var(--navy); }
+.notification-time { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-top: 0.45rem; display: block; }
 
-/* ── Empty Card ── */
+/* -- Empty Card -- */
 .empty-card {
     text-align: center;
     padding: 4rem 2rem;
@@ -1326,7 +1326,7 @@ body.admin-body {
 .empty-icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; }
 .empty-card p { color: var(--text-muted); font-weight: 600; margin-bottom: 1.5rem; font-size: 0.95rem; }
 
-/* ── Responsive ── */
+/* -- Responsive -- */
 @media (max-width: 960px) {
     .container {
         max-width: 100%;
@@ -1449,7 +1449,7 @@ body.admin-body {
         flex: 1;
     }
     .page-header h1 { font-size: 1.5rem; }
-    .jadwal-grid { grid-template-columns: 1fr; }
+    .schedule-grid { grid-template-columns: 1fr; }
     .ticket-info-grid { grid-template-columns: 1fr; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .payment-container { grid-template-columns: 1fr; }
@@ -1522,7 +1522,7 @@ body.admin-body {
     .order-summary,
     .payment-box,
     .info-card,
-    .notif-item {
+    .notification-item {
         padding: 1rem;
     }
     .auth-body {
@@ -1531,14 +1531,14 @@ body.admin-body {
     .auth-title {
         font-size: 1.85rem;
     }
-    .jadwal-grid,
+    .schedule-grid,
     .quick-actions,
     .booking-list,
-    .notif-list {
+    .notification-list {
         gap: 1rem;
     }
-    .jadwal-card-header,
-    .jadwal-route {
+    .schedule-card-header,
+    .schedule-route {
         align-items: flex-start;
         flex-direction: column;
         gap: 0.5rem;
@@ -1546,7 +1546,7 @@ body.admin-body {
     .route-arrow {
         transform: rotate(90deg);
     }
-    .jadwal-card-footer .btn,
+    .schedule-card-footer .btn,
     .filter-actions .btn {
         width: 100%;
     }

@@ -17,23 +17,23 @@
         <div class="info-grid">
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-bus"></i> Bus</span>
-                <span class="info-value" th:text="${jadwal.busBrand}">Haryanto</span>
+                <span class="info-value" th:text="${schedule.busBrand}">Haryanto</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-barcode"></i> Plate</span>
-                <span class="info-value badge badge-info" th:text="${jadwal.busPlateNumber}">B 1234</span>
+                <span class="info-value badge badge-info" th:text="${schedule.busPlateNumber}">B 1234</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-route"></i> Route</span>
-                <span class="info-value" th:text="${jadwal.route}">Jakarta - Semarang</span>
+                <span class="info-value" th:text="${schedule.route}">Jakarta - Semarang</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-clock"></i> Departure</span>
-                <span class="info-value" th:text="${#temporals.format(jadwal.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span>
+                <span class="info-value" th:text="${#temporals.format(schedule.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fa-solid fa-money-bill-wave"></i> Price</span>
-                <span class="info-value price-tag" th:text="'Rp ' + ${#numbers.formatDecimal(jadwal.price, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+                <span class="info-value price-tag" th:text="'Rp ' + ${#numbers.formatDecimal(schedule.price, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
             </div>
         </div>
     </div>
@@ -62,10 +62,10 @@
 
     <!-- Booking Form -->
     <form id="bookingForm" th:action="@{/user/booking/create}" method="post" style="margin-top:2rem;">
-        <input type="hidden" name="scheduleId" th:value="${jadwal.id}"/>
+        <input type="hidden" name="scheduleId" th:value="${schedule.id}"/>
         <input type="hidden" name="seatNumbers" id="seatNumbersInput" value=""/>
         <div class="form-actions">
-            <a th:href="@{/user/jadwal}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            <a th:href="@{/user/schedule}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</a>
             <button type="submit" class="btn btn-primary" id="bookBtn" disabled>Book Selected Seats <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </form>
@@ -73,7 +73,7 @@
 
 <!-- Pass data to JS -->
 <script th:inline="javascript">
-    const totalSeats = /*[[${jadwal.busTotalSeats}]]*/ 40;
+    const totalSeats = /*[[${schedule.busTotalSeats}]]*/ 40;
     const bookedSeats = /*[[${bookedSeats}]]*/ [];
 </script>
 <script th:src="@{/js/seat-map.js}"></script>

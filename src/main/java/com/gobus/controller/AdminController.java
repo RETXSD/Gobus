@@ -2,11 +2,11 @@ package com.gobus.controller;
 
 import com.gobus.entity.Booking;
 import com.gobus.entity.Bus;
-import com.gobus.entity.Jadwal;
+import com.gobus.entity.Schedule;
 import com.gobus.entity.User;
 import com.gobus.service.BookingService;
 import com.gobus.service.BusService;
-import com.gobus.service.JadwalService;
+import com.gobus.service.ScheduleService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,12 +24,12 @@ import java.util.Map;
 public class AdminController {
 
     private final BusService busService;
-    private final JadwalService jadwalService;
+    private final ScheduleService scheduleService;
     private final BookingService bookingService;
 
-    public AdminController(BusService busService, JadwalService jadwalService, BookingService bookingService) {
+    public AdminController(BusService busService, ScheduleService scheduleService, BookingService bookingService) {
         this.busService = busService;
-        this.jadwalService = jadwalService;
+        this.scheduleService = scheduleService;
         this.bookingService = bookingService;
     }
 
@@ -45,7 +45,7 @@ public class AdminController {
     public String dashboard(HttpSession session, Model model) {
         if (requireAdmin(session) == null) return "redirect:/login";
         model.addAttribute("busList", busService.findAll());
-        model.addAttribute("jadwalList", jadwalService.findAll());
+        model.addAttribute("scheduleList", scheduleService.findAll());
         model.addAttribute("bookingList", bookingService.findAll());
         return "admin/dashboard";
     }
@@ -91,19 +91,19 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
-    // ==================== JADWAL ====================
+    // ==================== SCHEDULE ====================
 
-    @GetMapping("/jadwal/form")
-    public String jadwalForm(@RequestParam(required = false) Long id, HttpSession session, Model model) {
+    @GetMapping("/schedule/form")
+    public String scheduleForm(@RequestParam(required = false) Long id, HttpSession session, Model model) {
         if (requireAdmin(session) == null) return "redirect:/login";
-        Jadwal jadwal = (id != null) ? jadwalService.findById(id) : new Jadwal();
-        model.addAttribute("jadwal", jadwal);
+        Schedule schedule = (id != null) ? scheduleService.findById(id) : new Schedule();
+        model.addAttribute("schedule", schedule);
         model.addAttribute("busList", busService.findAll());
-        return "admin/jadwal-form";
+        return "admin/schedule-form";
     }
 
-    @PostMapping("/jadwal/save")
-    public String jadwalSave(@RequestParam(required = false) Long id,
+    @PostMapping("/schedule/save")
+    public String scheduleSave(@RequestParam(required = false) Long id,
                              @RequestParam Long busId,
                              @RequestParam String route,
                              @RequestParam String departureTime,
@@ -111,39 +111,39 @@ public class AdminController {
                              HttpSession session,
                              RedirectAttributes ra) {
         if (requireAdmin(session) == null) return "redirect:/login";
-        Jadwal jadwal = new Jadwal();
-        jadwal.setId(id);
-        jadwal.setBusId(busId);
-        jadwal.setRoute(route);
-        jadwal.setDepartureTime(LocalDateTime.parse(departureTime));
-        jadwal.setPrice(price);
+        Schedule schedule = new Schedule();
+        schedule.setId(id);
+        schedule.setBusId(busId);
+        schedule.setRoute(route);
+        schedule.setDepartureTime(LocalDateTime.parse(departureTime));
+        schedule.setPrice(price);
         if (id != null) {
-            jadwalService.update(jadwal);
+            scheduleService.update(schedule);
             ra.addFlashAttribute("success", "Schedule updated successfully!");
         } else {
-            jadwalService.save(jadwal);
+            scheduleService.save(schedule);
             ra.addFlashAttribute("success", "Schedule added successfully!");
         }
         return "redirect:/admin/dashboard";
     }
 
-    @PostMapping("/jadwal/delete")
-    public String jadwalDelete(@RequestParam Long id, HttpSession session, RedirectAttributes ra) {
+    @PostMapping("/schedule/delete")
+    public String scheduleDelete(@RequestParam Long id, HttpSession session, RedirectAttributes ra) {
         if (requireAdmin(session) == null) return "redirect:/login";
-        jadwalService.delete(id);
+        scheduleService.delete(id);
         ra.addFlashAttribute("success", "Schedule deleted successfully!");
         return "redirect:/admin/dashboard";
     }
 
-    // ==================== TIKET / CEK PERJALANAN ====================
+    // ==================== TRIPS ====================
 
-    @GetMapping("/tiket")
-    public String tiketList(HttpSession session, Model model) {
+    @GetMapping("/trips")
+    public String tripList(HttpSession session, Model model) {
         if (requireAdmin(session) == null) return "redirect:/login";
-        List<Jadwal> jadwalList = jadwalService.findAll();
-        model.addAttribute("jadwalList", jadwalList);
+        List<Schedule> scheduleList = scheduleService.findAll();
+        model.addAttribute("scheduleList", scheduleList);
         model.addAttribute("now", LocalDateTime.now());
-        return "admin/tiket-list";
+        return "admin/trip-list";
     }
 
     @RequestMapping(value = "/api/trips/{id}", method = {RequestMethod.DELETE, RequestMethod.POST})
@@ -153,7 +153,7 @@ public class AdminController {
             return Map.of("success", false, "message", "Unauthorized");
         }
 
-        boolean deleted = jadwalService.deleteIfExpired(id);
+        boolean deleted = scheduleService.deleteIfExpired(id);
         if (!deleted) {
             return Map.of("success", false, "message", "Only departed trips can be deleted.");
         }
@@ -161,24 +161,24 @@ public class AdminController {
         return Map.of("success", true, "message", "Departed trip deleted successfully.");
     }
 
-    @GetMapping("/tiket/detail")
-    public String tiketDetail(@RequestParam Long scheduleId,
+    @GetMapping("/trips/detail")
+    public String tripDetail(@RequestParam Long scheduleId,
                               @RequestParam(required = false) String bookingCode,
                               HttpSession session,
                               Model model) {
         if (requireAdmin(session) == null) return "redirect:/login";
-        Jadwal jadwal = jadwalService.findById(scheduleId);
+        Schedule schedule = scheduleService.findById(scheduleId);
         List<Booking> allBookings = bookingService.findByScheduleId(scheduleId);
         List<Booking> bookings = bookingService.searchByScheduleIdAndBookingCode(scheduleId, bookingCode);
         List<Integer> bookedSeatNumbers = new ArrayList<>();
         for (Booking booking : allBookings) {
             bookedSeatNumbers.addAll(booking.getSeatNumbers());
         }
-        model.addAttribute("jadwal", jadwal);
+        model.addAttribute("schedule", schedule);
         model.addAttribute("allBookings", allBookings);
         model.addAttribute("bookings", bookings);
         model.addAttribute("bookedSeatNumbers", bookedSeatNumbers);
         model.addAttribute("bookingCode", bookingCode);
-        return "admin/tiket-detail";
+        return "admin/trip-detail";
     }
 }
