@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/navbar :: head('My Bookings')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar(${session.user}, ${unreadCount})}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fa-solid fa-ticket"></i> My Bookings</h1>
+        <p>Hello, <strong th:text="${session.user.name}">User</strong> — here are all your trips.</p>
+    </div>
+
+    <!-- Bookings List -->
+    <div class="section">
+
+        <div th:if="${#lists.isEmpty(myBookings)}" class="empty-card">
+            <span class="empty-icon"><i class="fa-solid fa-ticket fa-3x"></i></span>
+            <p>You don't have any bookings yet.</p>
+            <a th:href="@{/user/jadwal}" class="btn btn-primary">Find Bus Schedule</a>
+        </div>
+
+        <div class="booking-list" th:if="${!#lists.isEmpty(myBookings)}">
+            <div class="booking-card" th:each="bk : ${myBookings}">
+                <div class="booking-card-header">
+                    <span class="booking-code" th:text="${bk.bookingCode}">GB-HAR12-4829</span>
+                    <span th:class="${bk.paymentStatus == 'PAID'} ? 'badge badge-success' : 'badge badge-warning'">
+                        <i th:class="${bk.paymentStatus == 'PAID'} ? 'fa-solid fa-circle-check' : 'fa-solid fa-clock'"></i>
+                        <span th:text="${bk.paymentStatus == 'PAID'} ? ' PAID' : ' PENDING'">PAID</span>
+                    </span>
+                </div>
+                <div class="booking-card-body">
+                    <div class="booking-info-row">
+                        <span><i class="fa-solid fa-bus"></i> <strong th:text="${bk.busBrand}">Haryanto</strong></span>
+                        <span><i class="fa-solid fa-barcode"></i> <span th:text="${bk.busPlateNumber}">B 1234</span></span>
+                    </div>
+                    <div class="booking-info-row">
+                        <span><i class="fa-solid fa-route"></i> <span th:text="${bk.route}">Jakarta - Semarang</span></span>
+                        <span><i class="fa-solid fa-chair"></i> Seat <strong th:text="${bk.seatNumbersText}">12</strong></span>
+                    </div>
+                    <div class="booking-info-row">
+                        <span><i class="fa-solid fa-clock"></i> <span th:text="${#temporals.format(bk.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span></span>
+                        <span><i class="fa-solid fa-money-bill-wave"></i> <span th:text="'Rp ' + ${#numbers.formatDecimal(bk.price, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span></span>
+                    </div>
+                </div>
+                <div class="booking-card-footer" th:if="${bk.paymentStatus == 'PENDING'}">
+                    <a th:href="@{/user/bayar(bookingId=${bk.id})}" class="btn btn-primary btn-sm"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

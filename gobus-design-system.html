@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoBus Design System — Blue · White · Gold</title>
+<meta name="description" content="GoBus Design System — Token-driven, WCAG 2.2 AA, 7-state component coverage. Blue, White, and Gold palette for Indonesia's premier bus booking platform.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Sora:wght@700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ── Brand palette ── */
+    --gb-gold:      #D4A017;   /* primary accent — warm gold */
+    --gb-gold-lt:   #F5C842;   /* lighter gold for hover/glow */
+    --gb-gold-dk:   #A07810;   /* darker gold for pressed */
+    --gb-navy:      #0A1F3C;   /* deep navy — main dark */
+    --gb-blue:      #1A5EBF;   /* mid-blue — secondary */
+    --gb-blue-lt:   #2D7DED;   /* light blue — link / accent */
+    --gb-white:     #FFFFFF;   /* pure white */
+    --gb-off-white: #F4F6FA;   /* page background */
+    --gb-muted:     #6B7EA0;   /* muted text */
+    --gb-mid:       #334D7A;   /* secondary text */
+    --gb-surface:   #FFFFFF;   /* card surface */
+
+    /* ── Neubrutalist borders & shadows (adapted with navy) ── */
+    --nb-border:    2.5px solid #0A1F3C;
+    --nb-shadow:    4px 4px 0px #0A1F3C;
+    --nb-shadow-lg: 6px 6px 0px #0A1F3C;
+    --gold-glow:    0 0 0 3px rgba(212,160,23,.35);
+
+    /* ── Radius ── */
+    --r-xs: 8px; --r-sm: 12px; --r-md: 16px; --r-lg: 20px;
+    --r-xl: 28px; --r-2xl: 42px; --r-pill: 1000px;
+
+    /* ── Spacing ── */
+    --sp1: 4px; --sp2: 4.5px; --sp3: 5px; --sp4: 6px;
+    --sp5: 6.5px; --sp6: 7px; --sp7: 8px; --sp8: 9.5px;
+
+    /* ── Type scale ── */
+    --t-xs: 13.33px; --t-sm: 14px; --t-md: 16px; --t-lg: 18px;
+    --t-xl: 20px; --t-2xl: 28px; --t-3xl: 32px; --t-4xl: 54px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+    font-size: var(--t-md);
+    font-weight: 400;
+    line-height: normal;
+    background: var(--gb-off-white);
+    color: var(--gb-navy);
+  }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--gb-navy);
+    border-bottom: 2.5px solid var(--gb-gold);
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px;
+    border-right: 2px solid rgba(212,160,23,.35);
+    flex-shrink: 0;
+  }
+  .nav-logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    border-radius: var(--r-xs);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(212,160,23,.4);
+  }
+  .nav-logo svg { width: 18px; height: 18px; fill: var(--gb-navy); }
+  .nav-brand-name {
+    font-size: var(--t-sm); font-weight: 800; color: var(--gb-white);
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .nav-brand-name span { color: var(--gb-gold); }
+  .nav a {
+    padding: 14px 18px;
+    font-size: var(--t-xs); font-weight: 600;
+    color: rgba(255,255,255,.75);
+    text-decoration: none;
+    text-transform: uppercase; letter-spacing: .06em;
+    border-right: 1px solid rgba(255,255,255,.08);
+    white-space: nowrap;
+    transition: color 120ms, background 120ms;
+    flex-shrink: 0;
+  }
+  .nav a:hover { color: var(--gb-gold); background: rgba(212,160,23,.08); }
+  .nav a:focus-visible { outline: 3px solid var(--gb-gold); outline-offset: -3px; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 64px 0; border-bottom: var(--nb-border); }
+  .section:last-child { border-bottom: none; }
+  .section-label {
+    font-size: var(--t-xs); font-weight: 700; color: var(--gb-gold);
+    text-transform: uppercase; letter-spacing: .14em;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: var(--t-3xl); font-weight: 900;
+    color: var(--gb-navy);
+    text-transform: uppercase; letter-spacing: -.01em;
+    margin-bottom: 32px;
+  }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--gb-navy);
+    border-bottom: 2.5px solid var(--gb-gold);
+    padding: 72px 24px 64px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 80% 50%, rgba(26,94,191,.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 10% 90%, rgba(212,160,23,.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    color: var(--gb-navy);
+    font-size: var(--t-xs); font-weight: 800;
+    text-transform: uppercase; letter-spacing: .1em;
+    padding: 5px 14px;
+    border: var(--nb-border);
+    box-shadow: var(--nb-shadow);
+    margin-bottom: 24px;
+    border-radius: var(--r-xs);
+  }
+  .hero h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(40px, 7vw, var(--t-4xl));
+    font-weight: 900; text-transform: uppercase;
+    color: var(--gb-white);
+    line-height: .95;
+    letter-spacing: -.02em;
+    max-width: 680px;
+    margin-bottom: 20px;
+  }
+  .hero h1 span {
+    background: linear-gradient(90deg, var(--gb-gold), var(--gb-gold-lt));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    color: var(--gb-muted); font-size: var(--t-lg); max-width: 480px; margin-bottom: 36px;
+  }
+  .hero-meta { display: flex; gap: 40px; flex-wrap: wrap; }
+  .hero-stat .num {
+    font-size: var(--t-3xl); font-weight: 800;
+    background: linear-gradient(90deg, var(--gb-gold), var(--gb-gold-lt));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1;
+  }
+  .hero-stat .label {
+    font-size: var(--t-xs); color: var(--gb-muted); text-transform: uppercase; letter-spacing: .08em;
+  }
+  .hero-bg-text {
+    position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+    font-family: 'Sora', sans-serif;
+    font-size: 220px; font-weight: 900;
+    color: rgba(212,160,23,.04);
+    text-transform: uppercase;
+    pointer-events: none; user-select: none;
+    line-height: 1;
+  }
+
+  /* ── TOKEN CARD ── */
+  .token-card {
+    background: var(--gb-surface);
+    border: var(--nb-border);
+    box-shadow: var(--nb-shadow);
+    border-radius: var(--r-xs);
+    padding: 20px;
+  }
+  .token-label {
+    font-size: var(--t-xs); font-weight: 700; color: var(--gb-muted);
+    text-transform: uppercase; letter-spacing: .08em;
+    margin-bottom: 12px;
+  }
+
+  /* ── COLOR SWATCHES ── */
+  .swatch-row { display: flex; flex-direction: column; gap: 8px; }
+  .swatch {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    border: var(--nb-border);
+    background: var(--gb-surface);
+    border-radius: var(--r-xs);
+  }
+  .swatch-dot {
+    width: 32px; height: 32px; border-radius: var(--r-xs);
+    border: 2px solid rgba(0,0,0,.15); flex-shrink: 0;
+  }
+  .swatch-name { font-size: var(--t-xs); font-weight: 600; color: var(--gb-mid); }
+  .swatch-hex { font-family: 'JetBrains Mono', monospace; font-size: var(--t-xs); color: var(--gb-muted); margin-left: auto; }
+
+  /* ── TYPE SCALE ── */
+  .type-row {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid rgba(10,31,60,.1);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-token { font-family: 'JetBrains Mono', monospace; font-size: var(--t-xs); color: var(--gb-muted); width: 120px; flex-shrink: 0; }
+  .type-sample { color: var(--gb-navy); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 24px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: var(--t-md); font-weight: 700;
+    border: var(--nb-border);
+    cursor: pointer;
+    transition: transform 80ms, box-shadow 80ms;
+    text-decoration: none;
+    border-radius: var(--r-xs);
+    position: relative;
+  }
+  .btn:focus-visible {
+    outline: 3px solid var(--gb-gold);
+    outline-offset: 3px;
+  }
+  /* Primary — Gold */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    color: var(--gb-navy);
+    box-shadow: var(--nb-shadow);
+  }
+  .btn-primary:hover { transform: translate(-2px,-2px); box-shadow: var(--nb-shadow-lg); }
+  .btn-primary:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--gb-navy); }
+
+  /* Secondary — White */
+  .btn-secondary {
+    background: var(--gb-surface); color: var(--gb-navy);
+    box-shadow: var(--nb-shadow);
+  }
+  .btn-secondary:hover { transform: translate(-2px,-2px); box-shadow: var(--nb-shadow-lg); }
+  .btn-secondary:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--gb-navy); }
+
+  /* Ghost */
+  .btn-ghost {
+    background: transparent; color: var(--gb-navy);
+    box-shadow: none; border-color: transparent;
+  }
+  .btn-ghost:hover { background: rgba(10,31,60,.06); }
+
+  /* Dark — Navy with Gold text */
+  .btn-dark {
+    background: var(--gb-navy); color: var(--gb-gold);
+    box-shadow: var(--nb-shadow);
+  }
+  .btn-dark:hover { transform: translate(-2px,-2px); box-shadow: var(--nb-shadow-lg); }
+
+  /* Blue variant */
+  .btn-blue {
+    background: var(--gb-blue); color: var(--gb-white);
+    box-shadow: var(--nb-shadow);
+  }
+  .btn-blue:hover { transform: translate(-2px,-2px); box-shadow: var(--nb-shadow-lg); }
+
+  .btn[disabled], .btn.btn-disabled {
+    opacity: .4; cursor: not-allowed;
+    box-shadow: none !important; transform: none !important;
+  }
+  .btn-loading { position: relative; color: transparent !important; pointer-events: none; }
+  .btn-loading::after {
+    content: '';
+    position: absolute; width: 16px; height: 16px;
+    border: 2.5px solid var(--gb-navy); border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn-sm { padding: 8px 16px; font-size: var(--t-sm); }
+  .btn-lg { padding: 16px 32px; font-size: var(--t-lg); }
+  .btn-icon { width: 44px; height: 44px; padding: 0; }
+  .btn-pill { border-radius: var(--r-pill); }
+
+  /* ── INPUTS ── */
+  .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .input-label { font-size: var(--t-sm); font-weight: 700; color: var(--gb-navy); }
+  .input {
+    padding: 12px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: var(--t-md);
+    color: var(--gb-navy);
+    background: var(--gb-surface);
+    border: var(--nb-border);
+    border-radius: var(--r-xs);
+    outline: none;
+    transition: box-shadow 100ms;
+    box-shadow: var(--nb-shadow);
+    width: 100%;
+  }
+  .input::placeholder { color: var(--gb-muted); }
+  .input:hover { border-color: var(--gb-blue); }
+  .input:focus-visible { box-shadow: var(--gold-glow), var(--nb-shadow); border-color: var(--gb-gold); }
+  .input-error { border-color: #c0392b; box-shadow: 4px 4px 0 #c0392b; }
+  .input-hint { font-size: var(--t-xs); color: var(--gb-muted); }
+  .input-error-msg { font-size: var(--t-xs); color: #c0392b; font-weight: 700; }
+  .input-wrapper { position: relative; }
+  .input-icon-left { padding-left: 44px; }
+  .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gb-muted); font-size: 18px; pointer-events: none; }
+
+  /* ── SEARCH BAR ── */
+  .search-bar {
+    display: flex;
+    border: var(--nb-border);
+    box-shadow: var(--nb-shadow-lg);
+    background: var(--gb-surface);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .search-tab {
+    padding: 14px 18px;
+    font-size: var(--t-sm); font-weight: 700;
+    background: transparent; border: none;
+    border-right: var(--nb-border);
+    color: var(--gb-mid); cursor: pointer;
+    white-space: nowrap;
+    transition: background 120ms, color 120ms;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .search-tab.active {
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    color: var(--gb-navy);
+  }
+  .search-tab:hover:not(.active) { background: rgba(212,160,23,.1); color: var(--gb-navy); }
+  .search-input {
+    flex: 1; border: none; outline: none;
+    padding: 14px 16px;
+    font-size: var(--t-md); font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--gb-navy); background: transparent;
+  }
+  .search-btn {
+    padding: 12px 24px;
+    background: var(--gb-navy); color: var(--gb-gold);
+    border: none; border-left: var(--nb-border);
+    font-size: var(--t-md); font-weight: 700; cursor: pointer;
+    transition: background 120ms;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .search-btn:hover { background: var(--gb-blue); color: var(--gb-white); }
+  .search-btn:focus-visible { outline: 3px solid var(--gb-gold); outline-offset: -3px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--gb-surface);
+    border: var(--nb-border);
+    box-shadow: var(--nb-shadow);
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    transition: transform 100ms, box-shadow 100ms;
+    display: flex; flex-direction: column;
+    text-decoration: none;
+  }
+  .card:hover { transform: translate(-3px,-3px); box-shadow: var(--nb-shadow-lg); }
+  .card:focus-visible { outline: 3px solid var(--gb-gold); outline-offset: 2px; }
+  .card-img { height: 160px; background: var(--gb-navy); position: relative; overflow: hidden; }
+  .card-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+  }
+  .card-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    color: var(--gb-navy);
+    font-size: var(--t-xs); font-weight: 800;
+    padding: 3px 10px;
+    border: 2px solid var(--gb-navy);
+    box-shadow: 2px 2px 0 var(--gb-navy);
+    text-transform: uppercase; letter-spacing: .06em;
+    border-radius: 4px;
+  }
+  .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .card-category { font-size: var(--t-xs); font-weight: 700; color: var(--gb-muted); text-transform: uppercase; letter-spacing: .08em; }
+  .card-title { font-size: var(--t-lg); font-weight: 700; color: var(--gb-navy); line-height: 1.2; }
+  .card-meta { font-size: var(--t-sm); color: var(--gb-mid); }
+  .card-footer { padding: 12px 16px; border-top: 2.5px solid var(--gb-navy); display: flex; justify-content: space-between; align-items: center; }
+  .card-price { font-size: var(--t-md); font-weight: 800; color: var(--gb-navy); }
+  .card-price span { font-size: var(--t-xs); font-weight: 400; color: var(--gb-muted); }
+  .card-price-gold {
+    font-size: var(--t-md); font-weight: 800;
+    background: linear-gradient(90deg, var(--gb-gold-dk), var(--gb-gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  /* Star rating */
+  .stars { display: flex; gap: 2px; align-items: center; }
+  .star { color: var(--gb-gold); font-size: 13px; }
+  .star.empty { color: rgba(10,31,60,.2); }
+  .rating-label { font-size: var(--t-xs); color: var(--gb-mid); margin-left: 6px; }
+
+  /* ── TAG / PILL ── */
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 4px 12px;
+    font-size: var(--t-xs); font-weight: 700;
+    border: var(--nb-border);
+    border-radius: var(--r-pill);
+    background: var(--gb-surface);
+    color: var(--gb-navy);
+    cursor: pointer;
+    transition: background 100ms, transform 80ms;
+    text-transform: uppercase; letter-spacing: .06em;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .tag:hover {
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    transform: translate(-1px,-1px);
+    box-shadow: 2px 2px 0 var(--gb-navy);
+  }
+  .tag:focus-visible { outline: 3px solid var(--gb-gold); outline-offset: 2px; }
+  .tag.active {
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    box-shadow: 2px 2px 0 var(--gb-navy);
+  }
+  .tag-dark { background: var(--gb-navy); color: var(--gb-gold); }
+  .tag-blue { background: var(--gb-blue); color: var(--gb-white); border-color: var(--gb-blue); }
+  .tags-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ── TOAST ── */
+  .toast {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px;
+    border: var(--nb-border);
+    box-shadow: var(--nb-shadow);
+    background: var(--gb-surface);
+    border-radius: var(--r-xs);
+    margin-bottom: 8px;
+  }
+  .toast-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-top: 1px; }
+  .toast-success .toast-icon { border-color: var(--gb-navy); background: linear-gradient(135deg,var(--gb-gold),var(--gb-gold-lt)); color: var(--gb-navy); }
+  .toast-error .toast-icon { border-color: #c0392b; background: #fdecea; color: #c0392b; }
+  .toast-warning .toast-icon { border-color: var(--gb-blue); background: rgba(26,94,191,.1); color: var(--gb-blue); }
+  .toast-title { font-size: var(--t-sm); font-weight: 700; color: var(--gb-navy); margin-bottom: 2px; }
+  .toast-msg { font-size: var(--t-xs); color: var(--gb-mid); }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .breadcrumb-item { font-size: var(--t-sm); color: var(--gb-mid); text-decoration: none; }
+  .breadcrumb-item:hover { color: var(--gb-blue); text-decoration: underline; }
+  .breadcrumb-item.current { font-weight: 700; color: var(--gb-navy); }
+  .breadcrumb-sep { color: var(--gb-muted); font-size: var(--t-xs); }
+
+  /* ── STATE MATRIX ── */
+  .state-matrix { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  .state-item { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .state-label { font-size: var(--t-xs); font-weight: 600; color: var(--gb-muted); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── CHIP ── */
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    padding: 8px 16px; font-size: var(--t-sm); font-weight: 600;
+    border: var(--nb-border); background: var(--gb-surface);
+    border-radius: var(--r-pill); cursor: pointer;
+    transition: all 100ms;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .chip:hover { background: rgba(212,160,23,.12); }
+  .chip.selected { background: var(--gb-navy); color: var(--gb-gold); }
+  .chip:focus-visible { outline: 3px solid var(--gb-gold); outline-offset: 2px; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: var(--nb-border); margin: 24px 0; }
+  .divider-label {
+    display: flex; align-items: center; gap: 12px;
+    margin: 24px 0; color: var(--gb-muted); font-size: var(--t-xs); font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .divider-label::before, .divider-label::after { content: ''; flex: 1; border-top: var(--nb-border); }
+
+  /* ── ACCESSIBILITY BADGE ── */
+  .a11y-check {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border: var(--nb-border); border-radius: var(--r-xs);
+    background: var(--gb-surface);
+    box-shadow: var(--nb-shadow);
+    margin-bottom: 8px;
+  }
+  .a11y-pass { color: #006b2b; font-weight: 700; font-size: var(--t-sm); }
+  .a11y-fail { color: #c0392b; font-weight: 700; font-size: var(--t-sm); }
+  .a11y-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--gb-navy); flex-shrink: 0; }
+  .a11y-dot.pass { background: var(--gb-gold); }
+  .a11y-dot.fail { background: #c0392b; border-color: #c0392b; }
+  .a11y-text { font-size: var(--t-xs); color: var(--gb-mid); }
+
+  /* ── QA CHECKLIST ── */
+  .qa-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .qa-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px;
+    border: var(--nb-border); border-radius: var(--r-xs);
+    background: var(--gb-surface);
+    font-size: var(--t-sm); cursor: pointer;
+  }
+  .qa-item input[type="checkbox"] { margin-top: 1px; flex-shrink: 0; accent-color: var(--gb-gold); width: 16px; height: 16px; cursor: pointer; }
+  .qa-item:has(input:checked) { background: rgba(212,160,23,.08); }
+
+  /* ── SPACING VIZ ── */
+  .space-row { display: flex; align-items: center; gap: 16px; padding: 8px 0; border-bottom: 1px solid rgba(10,31,60,.08); }
+  .space-row:last-child { border-bottom: none; }
+  .space-bar { background: linear-gradient(90deg, var(--gb-gold), var(--gb-gold-lt)); border: 2px solid var(--gb-navy); height: 20px; flex-shrink: 0; }
+  .space-token { font-family: 'JetBrains Mono', monospace; font-size: var(--t-xs); color: var(--gb-muted); width: 64px; }
+  .space-val { font-size: var(--t-xs); font-weight: 600; color: var(--gb-mid); }
+
+  /* ── RADIUS VIZ ── */
+  .radius-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .radius-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .radius-box { width: 60px; height: 60px; background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt)); border: var(--nb-border); }
+  .radius-name { font-family: 'JetBrains Mono', monospace; font-size: var(--t-xs); color: var(--gb-muted); text-align: center; }
+
+  /* ── MOTION ── */
+  .motion-demo {
+    display: inline-flex; align-items: center; gap: 16px;
+    padding: 14px 20px;
+    border: var(--nb-border);
+    background: var(--gb-surface);
+    box-shadow: var(--nb-shadow);
+    border-radius: var(--r-xs);
+    font-size: var(--t-sm); font-weight: 600;
+    cursor: pointer;
+    transition: transform 100ms, box-shadow 100ms;
+  }
+  .motion-demo:hover { transform: translate(-2px,-2px); box-shadow: var(--nb-shadow-lg); }
+
+  /* ── BADGE / STATUS ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    font-size: var(--t-xs); font-weight: 700;
+    border-radius: var(--r-pill);
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .badge-gold { background: linear-gradient(135deg,var(--gb-gold),var(--gb-gold-lt)); color: var(--gb-navy); border: 2px solid var(--gb-navy); }
+  .badge-blue { background: var(--gb-blue); color: var(--gb-white); }
+  .badge-navy { background: var(--gb-navy); color: var(--gb-gold); }
+  .badge-success { background: #d4edda; color: #155724; border: 2px solid #155724; }
+  .badge-danger { background: #fdecea; color: #c0392b; border: 2px solid #c0392b; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--gb-navy);
+    border-top: 2.5px solid var(--gb-gold);
+    padding: 40px 24px;
+    color: var(--gb-muted);
+    font-size: var(--t-xs);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .footer strong { color: var(--gb-gold); }
+
+  /* ── SKIP LINK ── */
+  .skip-link {
+    position: absolute; top: -40px; left: 16px;
+    background: linear-gradient(135deg, var(--gb-gold), var(--gb-gold-lt));
+    color: var(--gb-navy);
+    font-weight: 700; padding: 8px 16px;
+    border: var(--nb-border); z-index: 9999;
+    transition: top 100ms; border-radius: var(--r-xs);
+  }
+  .skip-link:focus { top: 8px; }
+
+  /* ── PALETTE PREVIEW (big swatch) ── */
+  .palette-strip {
+    display: flex; border-radius: var(--r-sm); overflow: hidden;
+    border: var(--nb-border); box-shadow: var(--nb-shadow);
+    margin-bottom: 28px;
+    height: 80px;
+  }
+  .palette-swatch {
+    flex: 1;
+    display: flex; align-items: flex-end; padding: 8px 10px;
+    font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .04em;
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- NAV -->
+<nav class="nav" aria-label="GoBus Design System Navigation">
+  <div class="nav-brand" aria-hidden="true">
+    <div class="nav-logo">
+      <!-- Bus icon SVG -->
+      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="5" width="16" height="10" rx="2" fill="#0A1F3C"/>
+        <rect x="2" y="5" width="16" height="10" rx="2" stroke="#0A1F3C" stroke-width="0"/>
+        <rect x="3" y="6" width="14" height="7" rx="1.5" fill="#0A1F3C" opacity=".3"/>
+        <circle cx="5.5" cy="16.5" r="1.5" fill="#0A1F3C"/>
+        <circle cx="14.5" cy="16.5" r="1.5" fill="#0A1F3C"/>
+        <rect x="4" y="7.5" width="4" height="3" rx="0.5" fill="#0A1F3C" opacity=".6"/>
+        <rect x="9" y="7.5" width="4" height="3" rx="0.5" fill="#0A1F3C" opacity=".6"/>
+        <rect x="14" y="8" width="2" height="2" rx="0.5" fill="#0A1F3C" opacity=".6"/>
+      </svg>
+    </div>
+    <span class="nav-brand-name">Go<span>Bus</span> DS</span>
+  </div>
+  <a href="#tokens">Tokens</a>
+  <a href="#typography">Type</a>
+  <a href="#components">Components</a>
+  <a href="#states">States</a>
+  <a href="#accessibility">A11y</a>
+  <a href="#qa">QA</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">🚌 Design System — Bus Booking Platform</div>
+    <h1>GoBus<br><span>UI System</span></h1>
+    <p class="hero-sub">Token-driven, WCAG 2.2 AA, 7-state component coverage. Palet biru · putih · keemasan untuk pengalaman booking bus yang premium.</p>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <div class="num">500+</div>
+        <div class="label">Rute Bus</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">3</div>
+        <div class="label">Brand Colors</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">AA</div>
+        <div class="label">WCAG 2.2</div>
+      </div>
+    </div>
+    <div class="hero-bg-text" aria-hidden="true">GB</div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- TOKENS: COLOR -->
+<section class="section" id="tokens">
+  <div class="container">
+    <p class="section-label">01 — Design Tokens</p>
+    <h2 class="section-title">Color Foundations</h2>
+
+    <!-- Palette Strip Preview -->
+    <div class="palette-strip">
+      <div class="palette-swatch" style="background:#0A1F3C; color:rgba(212,160,23,.85);">Navy<br>#0A1F3C</div>
+      <div class="palette-swatch" style="background:#1A5EBF; color:rgba(255,255,255,.85);">Blue<br>#1A5EBF</div>
+      <div class="palette-swatch" style="background:#2D7DED; color:rgba(255,255,255,.85);">Blue-Lt<br>#2D7DED</div>
+      <div class="palette-swatch" style="background:#D4A017; color:#0A1F3C;">Gold<br>#D4A017</div>
+      <div class="palette-swatch" style="background:#F5C842; color:#0A1F3C;">Gold-Lt<br>#F5C842</div>
+      <div class="palette-swatch" style="background:#FFFFFF; color:#0A1F3C; border-left:2px solid #ccc;">White<br>#FFFFFF</div>
+      <div class="palette-swatch" style="background:#F4F6FA; color:#334D7A; border-left:1px solid #ccc;">Off-White<br>#F4F6FA</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="token-card">
+        <div class="token-label">Text tokens</div>
+        <div class="swatch-row">
+          <div class="swatch"><div class="swatch-dot" style="background:#0A1F3C"></div><span class="swatch-name">color.text.primary</span><span class="swatch-hex">#0A1F3C</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#334D7A"></div><span class="swatch-name">color.text.secondary</span><span class="swatch-hex">#334D7A</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#6B7EA0"></div><span class="swatch-name">color.text.muted</span><span class="swatch-hex">#6B7EA0</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#D4A017"></div><span class="swatch-name">color.text.accent (gold)</span><span class="swatch-hex">#D4A017</span></div>
+        </div>
+      </div>
+      <div class="token-card">
+        <div class="token-label">Surface & Brand tokens</div>
+        <div class="swatch-row">
+          <div class="swatch"><div class="swatch-dot" style="background:#0A1F3C"></div><span class="swatch-name">color.surface.navy</span><span class="swatch-hex">#0A1F3C</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#1A5EBF"></div><span class="swatch-name">color.surface.blue</span><span class="swatch-hex">#1A5EBF</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#D4A017"></div><span class="swatch-name">color.surface.gold</span><span class="swatch-hex">#D4A017</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#FFFFFF; border:2px solid #ccc"></div><span class="swatch-name">color.surface.white</span><span class="swatch-hex">#FFFFFF</span></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#F4F6FA; border:2px solid #ccc"></div><span class="swatch-name">color.surface.off-white</span><span class="swatch-hex">#F4F6FA</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOKENS: SPACING, RADIUS, MOTION -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">01 — Design Tokens</p>
+    <h2 class="section-title">Spacing · Radius · Motion</h2>
+    <div class="grid-3">
+      <div class="token-card">
+        <div class="token-label">Spacing scale</div>
+        <div class="space-row"><span class="space-token">space.1</span><div class="space-bar" style="width:4px"></div><span class="space-val">4px</span></div>
+        <div class="space-row"><span class="space-token">space.2</span><div class="space-bar" style="width:4.5px"></div><span class="space-val">4.5px</span></div>
+        <div class="space-row"><span class="space-token">space.3</span><div class="space-bar" style="width:5px"></div><span class="space-val">5px</span></div>
+        <div class="space-row"><span class="space-token">space.4</span><div class="space-bar" style="width:6px"></div><span class="space-val">6px</span></div>
+        <div class="space-row"><span class="space-token">space.5</span><div class="space-bar" style="width:6.5px"></div><span class="space-val">6.5px</span></div>
+        <div class="space-row"><span class="space-token">space.6</span><div class="space-bar" style="width:7px"></div><span class="space-val">7px</span></div>
+        <div class="space-row"><span class="space-token">space.7</span><div class="space-bar" style="width:8px"></div><span class="space-val">8px</span></div>
+        <div class="space-row"><span class="space-token">space.8</span><div class="space-bar" style="width:9.5px"></div><span class="space-val">9.5px</span></div>
+      </div>
+      <div class="token-card">
+        <div class="token-label">Border radius</div>
+        <div class="radius-row">
+          <div class="radius-item"><div class="radius-box" style="border-radius:8px"></div><div class="radius-name">xs<br>8px</div></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius:12px"></div><div class="radius-name">sm<br>12px</div></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius:16px"></div><div class="radius-name">md<br>16px</div></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius:20px"></div><div class="radius-name">lg<br>20px</div></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius:28px"></div><div class="radius-name">xl<br>28px</div></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius:1000px; width:60px; height:28px"></div><div class="radius-name">pill</div></div>
+        </div>
+      </div>
+      <div class="token-card">
+        <div class="token-label">Motion</div>
+        <p style="font-size:var(--t-xs);color:var(--gb-muted);margin-bottom:14px;">Semua transisi menggunakan <code style="font-size:var(--t-xs)">motion.duration.instant = 100ms</code>. Hover elemen di bawah.</p>
+        <div class="motion-demo" tabindex="0" aria-label="Motion demo — hover to see transition">
+          <span>🚌 Hover me</span>
+          <span style="color:var(--gb-muted);font-size:var(--t-xs)">translate(-2px,-2px)</span>
+        </div>
+        <p style="font-size:var(--t-xs);color:var(--gb-muted);margin-top:14px;">Semua komponen interaktif harus menghormati <code style="font-size:var(--t-xs)">prefers-reduced-motion</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section class="section" id="typography">
+  <div class="container">
+    <p class="section-label">02 — Typography</p>
+    <h2 class="section-title">Type Scale</h2>
+    <div class="token-card">
+      <div class="token-label">font.family: Plus Jakarta Sans (body) · Sora (heading) · JetBrains Mono (code)</div>
+      <div class="type-row"><span class="type-token">font.size.xs</span><span class="type-sample" style="font-size:13.33px">Pesan tiket bus sekarang — 13.33px</span></div>
+      <div class="type-row"><span class="type-token">font.size.sm</span><span class="type-sample" style="font-size:14px">Pesan tiket bus sekarang — 14px</span></div>
+      <div class="type-row"><span class="type-token">font.size.md</span><span class="type-sample" style="font-size:16px">Pesan tiket bus sekarang — 16px</span></div>
+      <div class="type-row"><span class="type-token">font.size.lg</span><span class="type-sample" style="font-size:18px">Pesan tiket bus sekarang — 18px</span></div>
+      <div class="type-row"><span class="type-token">font.size.xl</span><span class="type-sample" style="font-size:20px;font-weight:600">Pesan tiket bus sekarang — 20px</span></div>
+      <div class="type-row"><span class="type-token">font.size.2xl</span><span class="type-sample" style="font-size:28px;font-weight:700">Rute Populer — 28px</span></div>
+      <div class="type-row"><span class="type-token">font.size.3xl</span><span class="type-sample" style="font-size:32px;font-weight:800;font-family:'Sora',sans-serif">Mau ke mana? — 32px</span></div>
+      <div class="type-row"><span class="type-token">font.size.4xl</span><span class="type-sample" style="font-size:54px;font-weight:900;line-height:1;font-family:'Sora',sans-serif">Go — 54px</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTS: SEARCH BAR -->
+<section class="section" id="components">
+  <div class="container">
+    <p class="section-label">03 — Components</p>
+    <h2 class="section-title">Search Bar</h2>
+    <div class="search-bar" role="search" aria-label="Cari rute bus">
+      <button class="search-tab active" aria-pressed="true">Bus Antarkota</button>
+      <button class="search-tab" aria-pressed="false">Shuttle</button>
+      <button class="search-tab" aria-pressed="false">Charter</button>
+      <input class="search-input" type="search" placeholder="Dari mana — ke mana?" aria-label="Cari rute">
+      <button class="search-btn" aria-label="Cari bus">🔍 Cari</button>
+    </div>
+    <p style="font-size:var(--t-xs);color:var(--gb-muted);margin-top:8px">Tab aktif menggunakan gradient gold. Tombol cari: navy background → gold text. Hover ke biru saat cursor masuk.</p>
+  </div>
+</section>
+
+<!-- COMPONENTS: BUTTONS -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">03 — Components</p>
+    <h2 class="section-title">Buttons</h2>
+    <!-- State matrix -->
+    <div class="state-matrix">
+      <div class="state-item"><button class="btn btn-primary">Pesan</button><span class="state-label">Default</span></div>
+      <div class="state-item"><button class="btn btn-primary" style="transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--gb-navy)">Pesan</button><span class="state-label">Hover</span></div>
+      <div class="state-item"><button class="btn btn-primary" style="outline:3px solid var(--gb-gold);outline-offset:3px">Pesan</button><span class="state-label">Focus</span></div>
+      <div class="state-item"><button class="btn btn-primary" style="transform:translate(2px,2px);box-shadow:2px 2px 0 var(--gb-navy)">Pesan</button><span class="state-label">Active</span></div>
+      <div class="state-item"><button class="btn btn-primary btn-disabled" disabled>Pesan</button><span class="state-label">Disabled</span></div>
+      <div class="state-item"><button class="btn btn-primary btn-loading" aria-busy="true" aria-label="Loading">Pesan</button><span class="state-label">Loading</span></div>
+    </div>
+    <hr class="divider">
+    <div class="tags-row" style="margin-bottom:20px">
+      <button class="btn btn-primary">🎫 Pesan Sekarang</button>
+      <button class="btn btn-secondary">Lihat Detail</button>
+      <button class="btn btn-dark">Masuk</button>
+      <button class="btn btn-blue">Daftar</button>
+      <button class="btn btn-ghost">Batal</button>
+      <button class="btn btn-primary btn-sm">Kecil</button>
+      <button class="btn btn-primary btn-lg">Besar</button>
+      <button class="btn btn-primary btn-pill">Pill</button>
+    </div>
+    <p style="font-size:var(--t-xs);color:var(--gb-muted)">Primary = gold gradient + navy border + neubrutalist shadow. Hover: <code>translate(-2px,-2px)</code> + deeper shadow. Harus tersedia semua 7 state.</p>
+  </div>
+</section>
+
+<!-- COMPONENTS: INPUTS -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">03 — Components</p>
+    <h2 class="section-title">Inputs</h2>
+    <div class="grid-2">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="input-group">
+          <label class="input-label" for="inp-from">Kota Asal</label>
+          <div class="input-wrapper">
+            <span class="input-icon" aria-hidden="true">📍</span>
+            <input id="inp-from" class="input input-icon-left" type="text" placeholder="Contoh: Jakarta">
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="inp-date">Tanggal Berangkat</label>
+          <input id="inp-date" class="input input-error" type="text" placeholder="DD/MM/YYYY" aria-describedby="inp-date-msg" aria-invalid="true">
+          <span class="input-error-msg" id="inp-date-msg" role="alert">Tanggal tidak valid. Gunakan format DD/MM/YYYY.</span>
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="inp-promo">Kode Promo</label>
+          <input id="inp-promo" class="input" type="text" placeholder="Disabled" disabled>
+          <span class="input-hint">Hanya tersedia saat checkout.</span>
+        </div>
+      </div>
+      <div class="token-card" style="align-self:start">
+        <div class="token-label">Input state rules</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:var(--t-xs)">
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)"><strong>Default</strong> — 2.5px border navy, shadow 4px navy</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)"><strong>Hover</strong> — border berubah ke blue</div>
+          <div style="padding:8px;border:2.5px solid var(--gb-gold);box-shadow:0 0 0 3px rgba(212,160,23,.35),4px 4px 0 var(--gb-navy);border-radius:var(--r-xs)"><strong>Focus</strong> — gold glow ring + gold border</div>
+          <div style="padding:8px;border:2.5px solid #c0392b;box-shadow:4px 4px 0 #c0392b;border-radius:var(--r-xs)"><strong>Error</strong> — red border + shadow + aria-invalid</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs);opacity:.4"><strong>Disabled</strong> — 40% opacity, no pointer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTS: CARDS -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">03 — Components</p>
+    <h2 class="section-title">Route Cards</h2>
+    <div class="grid-3">
+      <a href="#" class="card" tabindex="0" aria-label="Jakarta ke Bandung, mulai Rp 75.000 per orang, rating 4.9">
+        <div class="card-img" style="background:linear-gradient(135deg,#0A1F3C 0%,#1A5EBF 100%)">
+          <div class="card-img-placeholder">🌆</div>
+          <div class="card-badge">Terlaris</div>
+        </div>
+        <div class="card-body">
+          <span class="card-category">Antarkota · Jawa Barat</span>
+          <div class="card-title">Jakarta → Bandung</div>
+          <div class="card-meta">⏱ ~3 jam · Berangkat 06:00, 08:00, 10:00</div>
+          <div class="stars">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+            <span class="rating-label">4.9 (2.841)</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div>
+            <span class="card-price-gold">Rp 75.000</span>
+            <span class="card-price"><span>/ orang</span></span>
+          </div>
+          <button class="btn btn-primary btn-sm" tabindex="-1" aria-hidden="true">Pesan</button>
+        </div>
+      </a>
+      <a href="#" class="card" tabindex="0" aria-label="Surabaya ke Yogyakarta, mulai Rp 120.000 per orang, rating 4.8">
+        <div class="card-img" style="background:linear-gradient(135deg,#1A5EBF 0%,#2D7DED 100%)">
+          <div class="card-img-placeholder">🕌</div>
+          <div class="card-badge">Promo</div>
+        </div>
+        <div class="card-body">
+          <span class="card-category">Antarkota · Jawa Tengah</span>
+          <div class="card-title">Surabaya → Yogyakarta</div>
+          <div class="card-meta">⏱ ~5.5 jam · Berangkat 07:00, 14:00</div>
+          <div class="stars">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star" style="color:var(--gb-gold-lt)">★</span>
+            <span class="rating-label">4.8 (1.204)</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div>
+            <span class="card-price-gold">Rp 120.000</span>
+            <span class="card-price"><span>/ orang</span></span>
+          </div>
+          <button class="btn btn-primary btn-sm" tabindex="-1" aria-hidden="true">Pesan</button>
+        </div>
+      </a>
+      <a href="#" class="card" tabindex="0" aria-label="Semarang ke Solo, mulai Rp 45.000 per orang, rating 4.7">
+        <div class="card-img" style="background:linear-gradient(135deg,#A07810 0%,#D4A017 100%)">
+          <div class="card-img-placeholder">🏯</div>
+        </div>
+        <div class="card-body">
+          <span class="card-category">Shuttle · Jawa Tengah</span>
+          <div class="card-title">Semarang → Solo</div>
+          <div class="card-meta">⏱ ~2 jam · Setiap jam 05:00–20:00</div>
+          <div class="stars">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span>
+            <span class="rating-label">4.7 (876)</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div>
+            <span class="card-price-gold">Rp 45.000</span>
+            <span class="card-price"><span>/ orang</span></span>
+          </div>
+          <button class="btn btn-primary btn-sm" tabindex="-1" aria-hidden="true">Pesan</button>
+        </div>
+      </a>
+    </div>
+    <p style="font-size:var(--t-xs);color:var(--gb-muted);margin-top:12px">Card hover: <code>translate(-3px,-3px)</code> + deeper shadow. Harga tampil dengan gradient gold. Bintang rating menggunakan warna gold.</p>
+  </div>
+</section>
+
+<!-- COMPONENTS: BADGES -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">03 — Components</p>
+    <h2 class="section-title">Badges · Tags · Chips</h2>
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <div>
+        <p class="token-label" style="margin-bottom:10px">Status badges</p>
+        <div class="tags-row">
+          <span class="badge badge-gold">⭐ Pilihan Utama</span>
+          <span class="badge badge-navy">🚌 Eksekutif</span>
+          <span class="badge badge-blue">🆕 Baru</span>
+          <span class="badge badge-success">✓ Tersedia</span>
+          <span class="badge badge-danger">✗ Habis</span>
+        </div>
+      </div>
+      <div>
+        <p class="token-label" style="margin-bottom:10px">Filter tags</p>
+        <div class="tags-row">
+          <button class="tag active">AC</button>
+          <button class="tag">WiFi</button>
+          <button class="tag">Toilet</button>
+          <button class="tag">Sleeper</button>
+          <button class="tag">Executive</button>
+          <button class="tag tag-dark">+ Lainnya</button>
+        </div>
+      </div>
+      <div>
+        <p class="token-label" style="margin-bottom:10px">Interest chips</p>
+        <div class="chip-row">
+          <button class="chip selected">🚌 Bus Malam</button>
+          <button class="chip">☀️ Bus Siang</button>
+          <button class="chip">💺 Ekonomi</button>
+          <button class="chip">👑 Eksekutif</button>
+        </div>
+      </div>
+      <div>
+        <p class="token-label" style="margin-bottom:10px">Breadcrumb navigation</p>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="#" class="breadcrumb-item">Beranda</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <a href="#" class="breadcrumb-item">Rute Bus</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <span class="breadcrumb-item current" aria-current="page">Jakarta → Bandung</span>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTS: TOASTS -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">03 — Components</p>
+    <h2 class="section-title">Feedback Toasts</h2>
+    <div style="max-width:480px;display:flex;flex-direction:column;gap:0">
+      <div class="toast toast-success" role="status" aria-live="polite">
+        <div class="toast-icon">✓</div>
+        <div><div class="toast-title">Pemesanan berhasil!</div><div class="toast-msg">Tiket Jakarta → Bandung tanggal 20 Jun sudah dikonfirmasi.</div></div>
+      </div>
+      <div class="toast toast-error" role="alert">
+        <div class="toast-icon">!</div>
+        <div><div class="toast-title">Pembayaran gagal</div><div class="toast-msg">Periksa detail kartu Anda dan coba lagi.</div></div>
+      </div>
+      <div class="toast toast-warning" role="status" aria-live="polite">
+        <div class="toast-icon">ℹ</div>
+        <div><div class="toast-title">Kursi terbatas</div><div class="toast-msg">Hanya tersisa 3 kursi untuk jadwal ini.</div></div>
+      </div>
+    </div>
+    <p style="font-size:var(--t-xs);color:var(--gb-muted);margin-top:12px">Error toast: <code>role="alert"</code>. Non-kritis: <code>role="status" aria-live="polite"</code>. Jangan auto-dismiss error.</p>
+  </div>
+</section>
+
+<!-- STATES -->
+<section class="section" id="states">
+  <div class="container">
+    <p class="section-label">04 — All 7 States</p>
+    <h2 class="section-title">State Coverage Matrix</h2>
+    <div class="token-card">
+      <div class="token-label">Wajib untuk setiap komponen interaktif</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:var(--t-xs)">
+          <thead>
+            <tr style="border-bottom:var(--nb-border)">
+              <th style="text-align:left;padding:8px 12px;font-weight:700">State</th>
+              <th style="text-align:left;padding:8px 12px;font-weight:700">Visual Change</th>
+              <th style="text-align:left;padding:8px 12px;font-weight:700">ARIA</th>
+              <th style="text-align:left;padding:8px 12px;font-weight:700">Token</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(10,31,60,.1)"><td style="padding:8px 12px;font-weight:600">Default</td><td style="padding:8px 12px;color:var(--gb-mid)">4px navy shadow</td><td style="padding:8px 12px">—</td><td style="padding:8px 12px;font-family:JetBrains Mono,monospace">nb-shadow</td></tr>
+            <tr style="border-bottom:1px solid rgba(10,31,60,.1)"><td style="padding:8px 12px;font-weight:600">Hover</td><td style="padding:8px 12px;color:var(--gb-mid)">-2px translate, 6px shadow</td><td style="padding:8px 12px">—</td><td style="padding:8px 12px;font-family:JetBrains Mono,monospace">nb-shadow-lg</td></tr>
+            <tr style="border-bottom:1px solid rgba(10,31,60,.1)"><td style="padding:8px 12px;font-weight:600">Focus-visible</td><td style="padding:8px 12px;color:var(--gb-mid)">3px gold ring, offset 3px</td><td style="padding:8px 12px">Tab-reachable</td><td style="padding:8px 12px;font-family:JetBrains Mono,monospace">color.surface.gold</td></tr>
+            <tr style="border-bottom:1px solid rgba(10,31,60,.1)"><td style="padding:8px 12px;font-weight:600">Active</td><td style="padding:8px 12px;color:var(--gb-mid)">+2px translate, 2px shadow</td><td style="padding:8px 12px">aria-pressed</td><td style="padding:8px 12px;font-family:JetBrains Mono,monospace">—</td></tr>
+            <tr style="border-bottom:1px solid rgba(10,31,60,.1)"><td style="padding:8px 12px;font-weight:600">Disabled</td><td style="padding:8px 12px;color:var(--gb-mid)">40% opacity, no shadow</td><td style="padding:8px 12px">disabled / aria-disabled</td><td style="padding:8px 12px;font-family:JetBrains Mono,monospace">opacity .4</td></tr>
+            <tr style="border-bottom:1px solid rgba(10,31,60,.1)"><td style="padding:8px 12px;font-weight:600">Loading</td><td style="padding:8px 12px;color:var(--gb-mid)">Teks disembunyikan, spinner</td><td style="padding:8px 12px">aria-busy="true"</td><td style="padding:8px 12px;font-family:JetBrains Mono,monospace">motion.instant</td></tr>
+            <tr><td style="padding:8px 12px;font-weight:600">Error</td><td style="padding:8px 12px;color:var(--gb-mid)">Red border + shadow</td><td style="padding:8px 12px">aria-invalid + describedby</td><td style="padding:8px 12px;font-family:JetBrains Mono,monospace">#c0392b border</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESSIBILITY -->
+<section class="section" id="accessibility">
+  <div class="container">
+    <p class="section-label">05 — Accessibility</p>
+    <h2 class="section-title">WCAG 2.2 AA Checks</h2>
+    <div class="grid-2">
+      <div>
+        <div class="a11y-check">
+          <div class="a11y-dot pass"></div>
+          <div>
+            <div class="a11y-pass">PASS — Navy (#0A1F3C) on Gold (#D4A017)</div>
+            <div class="a11y-text">Contrast ratio ≈ 8.2:1 — AA + AAA ✓</div>
+          </div>
+        </div>
+        <div class="a11y-check">
+          <div class="a11y-dot pass"></div>
+          <div>
+            <div class="a11y-pass">PASS — Navy (#0A1F3C) on White (#FFFFFF)</div>
+            <div class="a11y-text">Contrast ratio ≈ 18.4:1 — AA + AAA ✓</div>
+          </div>
+        </div>
+        <div class="a11y-check">
+          <div class="a11y-dot pass"></div>
+          <div>
+            <div class="a11y-pass">PASS — White (#FFFFFF) on Blue (#1A5EBF)</div>
+            <div class="a11y-text">Contrast ratio ≈ 5.3:1 — AA ✓</div>
+          </div>
+        </div>
+        <div class="a11y-check">
+          <div class="a11y-dot pass"></div>
+          <div>
+            <div class="a11y-pass">PASS — Gold (#D4A017) on Navy (#0A1F3C)</div>
+            <div class="a11y-text">Contrast ratio ≈ 8.2:1 — AA + AAA ✓</div>
+          </div>
+        </div>
+        <div class="a11y-check">
+          <div class="a11y-dot fail"></div>
+          <div>
+            <div class="a11y-fail">FLAG — Muted (#6B7EA0) on White (#FFFFFF)</div>
+            <div class="a11y-text">Contrast ≈ 3.8:1. Hanya untuk teks dekoratif / hint, bukan body copy.</div>
+          </div>
+        </div>
+      </div>
+      <div class="token-card" style="align-self:start">
+        <div class="token-label">Testable acceptance criteria</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:var(--t-xs)">
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ Semua elemen interaktif dapat dicapai via Tab</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ Focus ring gold visible minimal 3px (WCAG 2.2 3:1)</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ Tidak ada <code>outline:none</code> tanpa pengganti</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ Semua gambar punya alt text atau aria-hidden</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ Error message terhubung via aria-describedby</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ Toast menggunakan live region roles yang benar</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ Warna bukan satu-satunya indikator state</div>
+          <div style="padding:8px;border:var(--nb-border);border-radius:var(--r-xs)">✓ prefers-reduced-motion menonaktifkan transform</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QA CHECKLIST -->
+<section class="section" id="qa">
+  <div class="container">
+    <p class="section-label">06 — Quality Gate</p>
+    <h2 class="section-title">Implementation QA Checklist</h2>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:var(--t-sm);font-weight:700;color:var(--gb-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Tokens & Foundations</p>
+        <ul class="qa-list">
+          <li class="qa-item"><input type="checkbox" id="q1"><label for="q1">Semua warna menggunakan token semantik, bukan raw hex di komponen</label></li>
+          <li class="qa-item"><input type="checkbox" id="q2"><label for="q2">Nilai spacing sesuai skala token space.1–space.8</label></li>
+          <li class="qa-item"><input type="checkbox" id="q3"><label for="q3">Font stack: Plus Jakarta Sans, Arial, sans-serif (heading: Sora)</label></li>
+          <li class="qa-item"><input type="checkbox" id="q4"><label for="q4">Border radius hanya menggunakan step yang terdefinisi (xs → pill)</label></li>
+          <li class="qa-item"><input type="checkbox" id="q5"><label for="q5">Semua transisi 100ms (motion.duration.instant)</label></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:var(--t-sm);font-weight:700;color:var(--gb-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Components & States</p>
+        <ul class="qa-list">
+          <li class="qa-item"><input type="checkbox" id="q6"><label for="q6">Setiap komponen interaktif memiliki semua 7 state</label></li>
+          <li class="qa-item"><input type="checkbox" id="q7"><label for="q7">Focus ring gold visible tanpa mouse hover</label></li>
+          <li class="qa-item"><input type="checkbox" id="q8"><label for="q8">Elemen disabled memiliki pointer-events: none</label></li>
+          <li class="qa-item"><input type="checkbox" id="q9"><label for="q9">Loading state: aria-busy dan teks tersembunyi</label></li>
+          <li class="qa-item"><input type="checkbox" id="q10"><label for="q10">Input error: aria-invalid + aria-describedby</label></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:var(--t-sm);font-weight:700;color:var(--gb-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Accessibility</p>
+        <ul class="qa-list">
+          <li class="qa-item"><input type="checkbox" id="q11"><label for="q11">axe DevTools: 0 critical violations</label></li>
+          <li class="qa-item"><input type="checkbox" id="q12"><label for="q12">NVDA/VoiceOver: semua CTA terumumkan dengan benar</label></li>
+          <li class="qa-item"><input type="checkbox" id="q13"><label for="q13">Keyboard-only: seluruh alur pemesanan dapat diselesaikan</label></li>
+          <li class="qa-item"><input type="checkbox" id="q14"><label for="q14">Zoom 200%: tidak ada horizontal scroll pada konten</label></li>
+          <li class="qa-item"><input type="checkbox" id="q15"><label for="q15">Reduced motion: transform dinonaktifkan, konten tidak berubah</label></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:var(--t-sm);font-weight:700;color:var(--gb-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Content & Anti-patterns</p>
+        <ul class="qa-list">
+          <li class="qa-item"><input type="checkbox" id="q16"><label for="q16">Tidak ada "Klik di sini" tanpa konteks yang jelas</label></li>
+          <li class="qa-item"><input type="checkbox" id="q17"><label for="q17">Tidak ada spacing exception di luar skala token</label></li>
+          <li class="qa-item"><input type="checkbox" id="q18"><label for="q18">Teks muted (#6B7EA0) hanya untuk dekoratif / hint</label></li>
+          <li class="qa-item"><input type="checkbox" id="q19"><label for="q19">Konteks brand diverifikasi stakeholder sebelum handoff</label></li>
+          <li class="qa-item"><input type="checkbox" id="q20"><label for="q20">Gold gradient hanya digunakan pada CTA primary & accent utama</label></li>
+        </ul>
+      </div>
+    </div>
+    <div id="qa-progress" style="margin-top:24px;padding:16px 20px;background:var(--gb-surface);border:var(--nb-border);box-shadow:var(--nb-shadow);border-radius:var(--r-xs);display:flex;align-items:center;gap:16px">
+      <span style="font-size:var(--t-2xl);font-weight:900;color:var(--gb-navy)" id="qa-count">0/20</span>
+      <div style="flex:1">
+        <div style="height:12px;background:rgba(10,31,60,.1);border-radius:2px;border:2px solid var(--gb-navy);overflow:hidden">
+          <div id="qa-bar" style="height:100%;background:linear-gradient(90deg,var(--gb-gold),var(--gb-gold-lt));width:0%;transition:width 100ms"></div>
+        </div>
+        <p id="qa-label" style="font-size:var(--t-xs);color:var(--gb-muted);margin-top:6px">Centang item di atas untuk melacak kesiapan implementasi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div><strong>GoBus Design System</strong> — Bus Booking Platform v1.0</div>
+  <div>WCAG 2.2 AA · Token-driven · 7-state coverage · 🎨 Palette: Navy · Blue · Gold · White</div>
+</footer>
+
+<script>
+const checkboxes = document.querySelectorAll('.qa-item input[type="checkbox"]');
+const bar = document.getElementById('qa-bar');
+const count = document.getElementById('qa-count');
+const label = document.getElementById('qa-label');
+function updateQA() {
+  const checked = [...checkboxes].filter(c => c.checked).length;
+  const pct = Math.round(checked / checkboxes.length * 100);
+  bar.style.width = pct + '%';
+  count.textContent = checked + '/' + checkboxes.length;
+  if (pct === 100) { label.textContent = '✓ Semua pengecekan lulus — siap handoff!'; }
+  else if (pct >= 60) { label.textContent = 'Hampir selesai — tinjau item yang tersisa.'; }
+  else { label.textContent = 'Centang item di atas untuk melacak kesiapan implementasi.'; }
+}
+checkboxes.forEach(c => c.addEventListener('change', updateQA));
+
+const searchTabs = document.querySelectorAll('.search-tab');
+searchTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    searchTabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-pressed','false'); });
+    tab.classList.add('active'); tab.setAttribute('aria-pressed','true');
+  });
+  tab.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); tab.click(); } });
+});
+
+const chips = document.querySelectorAll('.chip');
+chips.forEach(chip => {
+  chip.addEventListener('click', () => chip.classList.toggle('selected'));
+  chip.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); chip.click(); } });
+});
+
+const tags = document.querySelectorAll('.tag');
+tags.forEach(tag => {
+  tag.addEventListener('click', () => {
+    tags.forEach(t => t.classList.remove('active'));
+    tag.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

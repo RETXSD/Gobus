@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/navbar :: head('Payment')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar(${session.user}, ${unreadCount})}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fa-solid fa-credit-card"></i> Confirm Payment</h1>
+        <p>Review your booking details before paying</p>
+    </div>
+
+    <div class="payment-container">
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h2><i class="fa-solid fa-receipt"></i> Order Summary</h2>
+            <div class="summary-rows">
+                <div class="summary-row">
+                    <span class="summary-label">Booking Code</span>
+                    <span class="summary-value booking-code" th:text="${booking.bookingCode}">GB-HAR12-4829</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Bus Brand</span>
+                    <span class="summary-value" th:text="${booking.busBrand}">Haryanto</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Plate Number</span>
+                    <span class="summary-value" th:text="${booking.busPlateNumber}">B 1234 CD</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Route</span>
+                    <span class="summary-value" th:text="${booking.route}">Jakarta - Semarang</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Departure</span>
+                    <span class="summary-value" th:text="${#temporals.format(booking.departureTime, 'dd MMM yyyy, HH:mm')} + ' WIB'">01 Jan 2025</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Seat Count</span>
+                    <span class="summary-value" th:text="${booking.seatCount} + ' seat(s)'">1 seat</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Seat Numbers</span>
+                    <span class="summary-value">
+                        <span class="badge badge-info" th:each="seat : ${booking.seatNumbers}" style="margin-left:0.25rem;">
+                            Seat <span th:text="${seat}">12</span>
+                        </span>
+                    </span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Price Per Seat</span>
+                    <span class="summary-value price-big" th:text="'Rp ' + ${#numbers.formatDecimal(booking.price, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span class="summary-label">Total Price</span>
+                    <span class="summary-value price-big" th:text="'Rp ' + ${#numbers.formatDecimal(totalPrice, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Simulation -->
+        <div class="payment-box">
+            <h2><i class="fa-solid fa-wallet"></i> Payment Simulation</h2>
+            <div class="payment-method-list">
+                <label class="payment-method active">
+                    <input type="radio" name="method" value="transfer" checked/>
+                    <span class="pm-icon"><i class="fa-solid fa-building-columns"></i></span>
+                    <span class="pm-label">Bank Transfer</span>
+                </label>
+                <label class="payment-method">
+                    <input type="radio" name="method" value="ewallet"/>
+                    <span class="pm-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                    <span class="pm-label">E-Wallet</span>
+                </label>
+                <label class="payment-method">
+                    <input type="radio" name="method" value="cash"/>
+                    <span class="pm-icon"><i class="fa-solid fa-money-bill-1"></i></span>
+                    <span class="pm-label">Cash</span>
+                </label>
+            </div>
+
+            <div class="payment-note">
+                <span class="note-icon"><i class="fa-solid fa-circle-info"></i></span>
+                This is a payment simulation. Click the button below to automatically complete the payment.
+            </div>
+
+            <form th:action="@{/user/bayar/proses}" method="post">
+                <input type="hidden" name="bookingId" th:value="${booking.id}"/>
+                <button type="submit" class="btn btn-primary btn-block btn-pay">
+                    <i class="fa-solid fa-circle-check"></i> Pay Now — <span th:text="'Rp ' + ${#numbers.formatDecimal(totalPrice, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+                </button>
+            </form>
+            <a th:href="@{/user/dashboard}" class="btn btn-secondary btn-block" style="margin-top:0.75rem;">Pay Later</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// Payment method selection styling
+document.querySelectorAll('.payment-method').forEach(el => {
+    el.addEventListener('click', function() {
+        document.querySelectorAll('.payment-method').forEach(e => e.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+</script>
+</body>
+</html>

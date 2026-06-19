@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/navbar :: head('Booking Successful')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar(${session.user}, ${unreadCount})}"></nav>
+
+<div class="container">
+    <div class="success-container">
+        <div class="success-icon"><i class="fa-solid fa-circle-check fa-3x" style="color: var(--success-color, #2ec4b6);"></i></div>
+        <h1 class="success-title">Payment Successful!</h1>
+        <p class="success-subtitle">Your ticket is confirmed. Have a safe journey!</p>
+
+        <!-- Ticket Card -->
+        <div class="ticket-card">
+            <div class="ticket-header">
+                <span class="ticket-brand"><i class="fa-solid fa-bus"></i> GoBus</span>
+                <span class="ticket-status badge badge-success"><i class="fa-solid fa-circle-check"></i> PAID</span>
+            </div>
+
+            <div class="ticket-code-section">
+                <span class="ticket-code-label">Booking Code</span>
+                <span class="ticket-code" th:text="${booking.bookingCode}">GB-HAR12-4829</span>
+            </div>
+
+            <div class="ticket-divider">
+                <span class="ticket-hole left"></span>
+                <span class="ticket-dash-line"></span>
+                <span class="ticket-hole right"></span>
+            </div>
+
+            <div class="ticket-details">
+                <div class="ticket-route">
+                    <div class="ticket-city">
+                        <span class="city-label">From</span>
+                        <span class="city-name" th:text="${#strings.substringBefore(booking.route, ' - ')}">Jakarta</span>
+                    </div>
+                    <div class="ticket-arrow-big"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="ticket-city">
+                        <span class="city-label">To</span>
+                        <span class="city-name" th:text="${#strings.substringAfter(booking.route, ' - ')}">Semarang</span>
+                    </div>
+                </div>
+
+                <div class="ticket-info-grid">
+                    <div class="ticket-info-item">
+                        <span class="ti-label"><i class="fa-solid fa-bus"></i> Bus</span>
+                        <span class="ti-value" th:text="${booking.busBrand}">Haryanto</span>
+                    </div>
+                    <div class="ticket-info-item">
+                        <span class="ti-label"><i class="fa-solid fa-barcode"></i> Plate</span>
+                        <span class="ti-value" th:text="${booking.busPlateNumber}">B 1234 CD</span>
+                    </div>
+                    <div class="ticket-info-item">
+                        <span class="ti-label"><i class="fa-solid fa-clock"></i> Departure</span>
+                        <span class="ti-value" th:text="${#temporals.format(booking.departureTime, 'dd MMM yyyy, HH:mm')}">01 Jan 2025</span>
+                    </div>
+                    <div class="ticket-info-item">
+                        <span class="ti-label"><i class="fa-solid fa-chair"></i> Seat Numbers</span>
+                        <span class="ti-value seat-highlight">
+                            <span th:each="seat, stat : ${booking.seatNumbers}">
+                                <span th:text="${seat}">12</span><span th:if="${!stat.last}">, </span>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="ticket-info-item">
+                        <span class="ti-label"><i class="fa-solid fa-user"></i> Passenger</span>
+                        <span class="ti-value" th:text="${session.user.name}">John Doe</span>
+                    </div>
+                    <div class="ticket-info-item">
+                        <span class="ti-label"><i class="fa-solid fa-money-bill-wave"></i> Total Price</span>
+                        <span class="ti-value price-tag" th:text="'Rp ' + ${#numbers.formatDecimal(totalPrice, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="notif-reminder">
+            <i class="fa-solid fa-bell"></i> You will receive reminder notifications at <strong>3 days</strong>, <strong>1 day</strong>, <strong>5 hours</strong>, and <strong>3 hours</strong> before departure!
+        </div>
+
+        <div class="success-actions">
+            <a th:href="@{/user/dashboard}" class="btn btn-primary">View All Bookings</a>
+            <a th:href="@{/user/jadwal}" class="btn btn-secondary">Find Other Schedules</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/admin-sidebar :: admin-head('Trip Details')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{fragments/admin-sidebar :: sidebar(${session.user})}"></aside>
+
+<div class="admin-main">
+    <div class="page-header">
+        <h1><i class="fa-solid fa-ticket"></i> Trip Details</h1>
+    </div>
+
+    <!-- Schedule Info Card -->
+    <div class="info-card">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-bus"></i> Bus Brand</span>
+                <span class="info-value" th:text="${jadwal.busBrand}">Haryanto</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-barcode"></i> Plate Number</span>
+                <span class="info-value badge badge-info" th:text="${jadwal.busPlateNumber}">B 1234 CD</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-route"></i> Route</span>
+                <span class="info-value" th:text="${jadwal.route}">Jakarta - Semarang</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-clock"></i> Departure</span>
+                <span class="info-value" th:text="${#temporals.format(jadwal.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-chair"></i> Total Seats</span>
+                <span class="info-value" th:text="${jadwal.busTotalSeats}">40</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-ticket"></i> Occupied Seats</span>
+                <span class="info-value badge badge-danger" th:text="${#lists.size(allBookings)}">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seat Visual -->
+    <div class="section">
+        <h2 style="margin-bottom:1rem;"><i class="fa-solid fa-chair"></i> Seat Status</h2>
+        <div class="seat-legend" style="margin-bottom:1rem;">
+            <span class="legend-item"><span class="seat-dot seat-available"></span> Available</span>
+            <span class="legend-item"><span class="seat-dot seat-booked"></span> Occupied</span>
+        </div>
+        <div class="seat-grid-admin" th:with="bookedNums=${#sets.toSet(bookedSeatNumbers)}">
+            <div th:each="i : ${#numbers.sequence(1, jadwal.busTotalSeats)}"
+                 th:class="${bookedNums.contains(i)} ? 'seat-admin seat-admin-booked' : 'seat-admin seat-admin-free'"
+                 th:text="${i}">1</div>
+        </div>
+    </div>
+
+    <!-- Passenger List -->
+    <div class="section">
+        <h2><i class="fa-solid fa-users"></i> Passenger List</h2>
+        <form th:action="@{/admin/tiket/detail}" method="get" class="filter-card compact-filter">
+            <input type="hidden" name="scheduleId" th:value="${jadwal.id}"/>
+            <div class="filter-grid">
+                <div class="form-group">
+                    <label for="bookingCode">Booking Code</label>
+                    <input type="text" id="bookingCode" name="bookingCode" th:value="${bookingCode}" placeholder="GB-HAR12-4829"/>
+                </div>
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                    <a th:href="@{/admin/tiket/detail(scheduleId=${jadwal.id})}" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</a>
+                </div>
+            </div>
+        </form>
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Booking Code</th>
+                        <th>Passenger Name</th>
+                        <th>Email</th>
+                        <th>Seat</th>
+                        <th>Payment Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="bk, stat : ${bookings}">
+                        <td th:text="${stat.index + 1}">1</td>
+                        <td><span class="badge badge-primary" th:text="${bk.bookingCode}">GB-HAR12-4829</span></td>
+                        <td th:text="${bk.userName}">John Doe</td>
+                        <td th:text="${bk.userEmail}">john@email.com</td>
+                        <td><span class="badge badge-info">Seat <span th:text="${bk.seatNumbersText}">12</span></span></td>
+                        <td>
+                            <span th:class="${bk.paymentStatus == 'PAID'} ? 'badge badge-success' : 'badge badge-warning'">
+                                <i th:class="${bk.paymentStatus == 'PAID'} ? 'fa-solid fa-circle-check' : 'fa-solid fa-clock'"></i>
+                                <span th:text="${bk.paymentStatus == 'PAID'} ? ' PAID' : ' PENDING'">PAID</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(bookings)}">
+                        <td colspan="6" class="empty-state" th:text="${bookingCode != null and !#strings.isEmpty(#strings.trim(bookingCode))} ? 'No passengers match that booking code.' : 'No passengers have booked this schedule yet.'">No passengers have booked this schedule yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <a th:href="@{/admin/tiket}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Trips</a>
+    </div>
+</div>
+</body>
+</html>

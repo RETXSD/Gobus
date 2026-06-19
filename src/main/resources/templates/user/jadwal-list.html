@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/navbar :: head('Bus Schedule')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar(${session.user}, ${unreadCount})}"></nav>
+
+<div class="container schedule-page">
+    <section class="hero-banner" aria-label="GoBus booking banner">
+        <div class="hero-copy">
+            <span class="hero-kicker"><i class="fa-solid fa-route"></i> Intercity Travel</span>
+            <h1>Book Your Bus Trip Faster</h1>
+            <p>Choose routes, compare schedules, and reserve your seat in a few clicks.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true"></div>
+    </section>
+
+    <div class="page-header">
+        <h1><i class="fa-solid fa-calendar-days"></i> Available Bus Schedules</h1>
+        <p>Select a schedule and book your seat now</p>
+    </div>
+
+    <form th:action="@{/user/jadwal}" method="get" class="filter-card">
+        <div class="filter-grid">
+            <div class="form-group">
+                <label for="busName">Bus Name</label>
+                <input type="text" id="busName" name="busName" th:value="${busName}" placeholder="Haryanto, Damri, ALS"/>
+            </div>
+            <div class="form-group">
+                <label for="destination">Final Destination</label>
+                <input type="text" id="destination" name="destination" th:value="${destination}" placeholder="Bandung, Surabaya, Padang"/>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Filter</button>
+                <a th:href="@{/user/jadwal}" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset</a>
+            </div>
+        </div>
+    </form>
+
+    <div th:if="${#lists.isEmpty(jadwalList)}" class="empty-card">
+        <span class="empty-icon"><i class="fa-solid fa-calendar-xmark fa-3x"></i></span>
+        <p>No schedules available.</p>
+    </div>
+
+    <div class="jadwal-grid" th:if="${!#lists.isEmpty(jadwalList)}">
+        <div class="jadwal-card" th:each="j : ${jadwalList}">
+            <div class="jadwal-card-header">
+                <span class="jadwal-brand" th:text="${j.busBrand}">Haryanto</span>
+                <span class="badge badge-info" th:text="${j.busPlateNumber}">B 1234 CD</span>
+            </div>
+            <div class="jadwal-route">
+                <span class="route-from" th:text="${#strings.substringBefore(j.route, ' - ')}">Jakarta</span>
+                <span class="route-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="route-to" th:text="${#strings.substringAfter(j.route, ' - ')}">Semarang</span>
+            </div>
+            <div class="jadwal-details">
+                <div class="jadwal-detail-item">
+                    <span class="detail-icon"><i class="fa-solid fa-clock"></i></span>
+                    <span th:text="${#temporals.format(j.departureTime, 'dd MMM yyyy, HH:mm')}">01 Jan 2025</span>
+                </div>
+                <div class="jadwal-detail-item">
+                    <span class="detail-icon"><i class="fa-solid fa-chair"></i></span>
+                    <span th:text="${j.busTotalSeats} + ' seats available'">40 seats available</span>
+                </div>
+                <div class="jadwal-detail-item">
+                    <span class="detail-icon"><i class="fa-solid fa-money-bill-wave"></i></span>
+                    <span class="price-tag" th:text="'Rp ' + ${#numbers.formatDecimal(j.price, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+                </div>
+            </div>
+            <div class="jadwal-card-footer">
+                <a th:href="@{/user/seat-map(scheduleId=${j.id})}" class="btn btn-primary btn-block">
+                    Select Seat <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

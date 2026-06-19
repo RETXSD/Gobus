@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/admin-sidebar :: admin-head('Check Trips')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{fragments/admin-sidebar :: sidebar(${session.user})}"></aside>
+
+<div class="admin-main">
+    <div class="page-header">
+        <h1><i class="fa-solid fa-ticket"></i> Check Trips</h1>
+        <p>View seat status and passenger list per schedule</p>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Bus Brand</th>
+                    <th>Plate</th>
+                    <th>Route</th>
+                    <th>Departure</th>
+                    <th>Status</th>
+                    <th>Total Seats</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="j, stat : ${jadwalList}">
+                    <td th:text="${stat.index + 1}">1</td>
+                    <td th:text="${j.busBrand}">Haryanto</td>
+                    <td><span class="badge badge-info" th:text="${j.busPlateNumber}">B 123</span></td>
+                    <td th:text="${j.route}">Jakarta - Semarang</td>
+                    <td th:text="${#temporals.format(j.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</td>
+                    <td>
+                        <span th:if="${j.departureTime.isBefore(now)}" class="badge badge-danger">Departed</span>
+                        <span th:unless="${j.departureTime.isBefore(now)}" class="badge badge-success">Upcoming</span>
+                    </td>
+                    <td th:text="${j.busTotalSeats}">40</td>
+                    <td class="action-cell">
+                        <a th:if="${!j.departureTime.isBefore(now)}" th:href="@{/admin/tiket/detail(scheduleId=${j.id})}" class="btn btn-sm btn-primary">
+                            <i class="fa-solid fa-magnifying-glass"></i> Check Details
+                        </a>
+                        <button th:if="${j.departureTime.isBefore(now)}"
+                                type="button"
+                                class="btn btn-sm btn-danger delete-expired-trip"
+                                th:data-delete-url="@{/admin/api/trips/{id}(id=${j.id})}">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(jadwalList)}">
+                    <td colspan="8" class="empty-state">No schedules available.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('.delete-expired-trip').forEach(function(button) {
+        button.addEventListener('click', async function() {
+            if (!confirm('Delete this departed trip from the database? Related bookings and notifications will also be removed.')) {
+                return;
+            }
+
+            button.disabled = true;
+            button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Deleting';
+
+            try {
+                let response = await fetch(button.dataset.deleteUrl, { method: 'DELETE' });
+                if (response.status === 405) {
+                    response = await fetch(button.dataset.deleteUrl, { method: 'POST' });
+                }
+                const result = await response.json();
+
+                if (result.success) {
+                    button.closest('tr').remove();
+                    return;
+                }
+
+                alert(result.message || 'Failed to delete departed trip.');
+                button.disabled = false;
+                button.innerHTML = '<i class="fa-solid fa-trash"></i> Delete';
+            } catch (error) {
+                alert('Failed to delete departed trip.');
+                button.disabled = false;
+                button.innerHTML = '<i class="fa-solid fa-trash"></i> Delete';
+            }
+        });
+    });
+</script>
+</body>
+</html>

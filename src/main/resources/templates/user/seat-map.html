@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/navbar :: head('Select Seat')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar(${session.user}, ${unreadCount})}"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fa-solid fa-chair"></i> Select Seat</h1>
+        <p>Click one or more available seats to book</p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <!-- Journey Info -->
+    <div class="info-card" style="margin-bottom:2rem;">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-bus"></i> Bus</span>
+                <span class="info-value" th:text="${jadwal.busBrand}">Haryanto</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-barcode"></i> Plate</span>
+                <span class="info-value badge badge-info" th:text="${jadwal.busPlateNumber}">B 1234</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-route"></i> Route</span>
+                <span class="info-value" th:text="${jadwal.route}">Jakarta - Semarang</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-clock"></i> Departure</span>
+                <span class="info-value" th:text="${#temporals.format(jadwal.departureTime, 'dd MMM yyyy HH:mm')}">01 Jan 2025</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-money-bill-wave"></i> Price</span>
+                <span class="info-value price-tag" th:text="'Rp ' + ${#numbers.formatDecimal(jadwal.price, 1, 'COMMA', 0, 'POINT')}">Rp 150.000</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="seat-legend">
+        <span class="legend-item"><span class="seat-box seat-available-demo"></span> Available</span>
+        <span class="legend-item"><span class="seat-box seat-booked-demo"></span> Booked</span>
+        <span class="legend-item"><span class="seat-box seat-selected-demo"></span> Selected</span>
+    </div>
+
+    <!-- Selected Info -->
+    <div class="selected-info" id="selectedInfo" style="display:none;">
+        Selected seats: <strong id="selectedSeatDisplay">-</strong>
+    </div>
+
+    <!-- Seat Map -->
+    <div class="bus-body">
+        <div class="bus-front">
+            <span class="driver-icon"><i class="fa-solid fa-user-tie"></i> Driver</span>
+        </div>
+        <div class="seat-grid" id="seatGrid">
+            <!-- Rendered by JS -->
+        </div>
+    </div>
+
+    <!-- Booking Form -->
+    <form id="bookingForm" th:action="@{/user/booking/create}" method="post" style="margin-top:2rem;">
+        <input type="hidden" name="scheduleId" th:value="${jadwal.id}"/>
+        <input type="hidden" name="seatNumbers" id="seatNumbersInput" value=""/>
+        <div class="form-actions">
+            <a th:href="@{/user/jadwal}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            <button type="submit" class="btn btn-primary" id="bookBtn" disabled>Book Selected Seats <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </form>
+</div>
+
+<!-- Pass data to JS -->
+<script th:inline="javascript">
+    const totalSeats = /*[[${jadwal.busTotalSeats}]]*/ 40;
+    const bookedSeats = /*[[${bookedSeats}]]*/ [];
+</script>
+<script th:src="@{/js/seat-map.js}"></script>
+</body>
+</html>

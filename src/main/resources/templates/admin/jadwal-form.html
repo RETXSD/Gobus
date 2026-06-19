@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/admin-sidebar :: admin-head('Schedule Form')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{fragments/admin-sidebar :: sidebar(${session.user})}"></aside>
+
+<div class="admin-main">
+    <div class="page-header">
+        <h1>
+            <i th:class="${jadwal.id != null} ? 'fa-solid fa-pen-to-square' : 'fa-solid fa-calendar-plus'"></i>
+            <span th:text="${jadwal.id != null} ? ' Edit Schedule' : ' Add Schedule'">Add Schedule</span>
+        </h1>
+    </div>
+
+    <div class="form-card">
+        <form th:action="@{/admin/jadwal/save}" method="post">
+            <input type="hidden" name="id" th:value="${jadwal.id}"/>
+
+            <div class="form-group">
+                <label for="busId">Bus Brand</label>
+                <select id="busId" name="busId" required onchange="updatePlate(this)">
+                    <option value="">-- Select Bus --</option>
+                    <option th:each="bus : ${busList}"
+                            th:value="${bus.id}"
+                            th:text="${bus.brand} + ' (' + ${bus.plateNumber} + ') — ' + ${bus.totalSeats} + ' seats'"
+                            th:selected="${jadwal.busId != null and jadwal.busId == bus.id}"
+                            th:data-brand="${bus.brand}"
+                            th:data-plate="${bus.plateNumber}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Plate Info (automatic from bus selection)</label>
+                <input type="text" id="platInfo" readonly placeholder="Will fill automatically"
+                       th:value="${jadwal.busPlateNumber}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="route">Travel Route</label>
+                <input type="text" id="route" name="route" th:value="${jadwal.route}"
+                       placeholder="e.g. Jakarta - Semarang" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="departureTime">Departure Time</label>
+                <input type="datetime-local" id="departureTime" name="departureTime"
+                       th:value="${jadwal.departureTime != null} ? ${#temporals.format(jadwal.departureTime, 'yyyy-MM-dd''T''HH:mm')} : ''"
+                       required/>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price (IDR)</label>
+                <input type="number" id="price" name="price" th:value="${jadwal.price}"
+                       min="0" step="1000" placeholder="e.g. 150000" required/>
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/admin/dashboard}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span th:text="${jadwal.id != null} ? ' Update Schedule' : ' Save Schedule'">Save Schedule</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function updatePlate(select) {
+    const opt = select.options[select.selectedIndex];
+    document.getElementById('platInfo').value = opt.getAttribute('data-plate') || '';
+}
+// Run on load for edit mode
+window.onload = () => {
+    const sel = document.getElementById('busId');
+    if (sel) updatePlate(sel);
+};
+</script>
+</body>
+</html>

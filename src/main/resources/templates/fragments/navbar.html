@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} + ' — GoBus'">GoBus</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+
+<th:block th:fragment="navbar(user, unreadCount)">
+<nav class="navbar" id="main-navbar">
+    <!-- Brand -->
+    <a th:href="${user != null and user.role == 'ADMIN'} ? '/admin/dashboard' : '/user/jadwal'"
+       class="brand-link" id="nav-brand">
+        <span class="brand-icon"><i class="fa-solid fa-bus"></i></span>
+        <span class="brand-text">Go<span class="brand-accent">Bus</span></span>
+    </a>
+
+    <!-- Desktop Nav Links -->
+    <div class="navbar-links" id="navbar-links">
+
+        <!-- USER links -->
+        <div th:if="${user != null and user.role == 'USER'}" class="nav-group">
+            <a th:href="@{/user/jadwal}" class="nav-link" id="nav-schedule">
+                <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                <span class="nav-label">Home</span>
+                <span class="nav-sublabel">Bus Schedule</span>
+            </a>
+            <a th:href="@{/user/notifikasi}" class="nav-link notif-link" id="nav-notif">
+                <span class="nav-icon"><i class="fa-solid fa-bell"></i></span>
+                <span class="nav-label">Notifications</span>
+                <span class="notif-badge"
+                      th:if="${unreadCount != null and unreadCount > 0}"
+                      th:text="${unreadCount}"
+                      id="notif-badge">0</span>
+            </a>
+            <a th:href="@{/user/dashboard}" class="nav-link" id="nav-bookings">
+                <span class="nav-icon"><i class="fa-solid fa-ticket"></i></span>
+                <span class="nav-label">My Bookings</span>
+            </a>
+        </div>
+
+        <!-- ADMIN links -->
+        <div th:if="${user != null and user.role == 'ADMIN'}" class="nav-group">
+            <a th:href="@{/admin/dashboard}" class="nav-link" id="nav-admin-dash">
+                <span class="nav-icon"><i class="fa-solid fa-chart-simple"></i></span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a th:href="@{/admin/bus/form}" class="nav-link" id="nav-admin-bus">
+                <span class="nav-icon"><i class="fa-solid fa-bus"></i></span>
+                <span class="nav-label">Add Bus</span>
+            </a>
+            <a th:href="@{/admin/jadwal/form}" class="nav-link" id="nav-admin-jadwal">
+                <span class="nav-icon"><i class="fa-solid fa-calendar-plus"></i></span>
+                <span class="nav-label">Add Schedule</span>
+            </a>
+            <a th:href="@{/admin/tiket}" class="nav-link" id="nav-admin-tiket">
+                <span class="nav-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+                <span class="nav-label">Check Trips</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Right: User area -->
+    <div class="navbar-right" th:if="${user != null}" id="navbar-right">
+        <div class="nav-avatar" id="nav-avatar">
+            <span class="avatar-initial"
+                  th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">U</span>
+        </div>
+        <span class="user-name" th:text="${user.name}" id="nav-username">User</span>
+        <a th:href="@{/logout}" class="btn-logout" id="nav-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+
+    <!-- Mobile hamburger toggle -->
+    <button class="hamburger" id="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- Mobile slide-down menu -->
+<div class="mobile-menu" id="mobile-menu">
+    <div th:if="${user != null and user.role == 'USER'}">
+        <a th:href="@{/user/jadwal}"      class="mobile-nav-link" id="m-nav-schedule"><i class="fa-solid fa-house"></i> Home — Bus Schedule</a>
+        <a th:href="@{/user/notifikasi}"  class="mobile-nav-link" id="m-nav-notif">
+            <i class="fa-solid fa-bell"></i> Notifications
+            <span class="notif-badge"
+                  th:if="${unreadCount != null and unreadCount > 0}"
+                  th:text="${unreadCount}">0</span>
+        </a>
+        <a th:href="@{/user/dashboard}"   class="mobile-nav-link" id="m-nav-bookings"><i class="fa-solid fa-ticket"></i> My Bookings</a>
+    </div>
+    <div th:if="${user != null and user.role == 'ADMIN'}">
+        <a th:href="@{/admin/dashboard}"  class="mobile-nav-link" id="m-nav-admin-dash"><i class="fa-solid fa-chart-simple"></i> Dashboard</a>
+        <a th:href="@{/admin/bus/form}"   class="mobile-nav-link" id="m-nav-admin-bus"><i class="fa-solid fa-bus"></i> Add Bus</a>
+        <a th:href="@{/admin/jadwal/form}"class="mobile-nav-link" id="m-nav-admin-jadwal"><i class="fa-solid fa-calendar-plus"></i> Add Schedule</a>
+        <a th:href="@{/admin/tiket}"      class="mobile-nav-link" id="m-nav-admin-tiket"><i class="fa-solid fa-clipboard-list"></i> Check Trips</a>
+    </div>
+    <div class="mobile-menu-footer" th:if="${user != null}">
+        <span class="mobile-username" th:text="'Hi, ' + ${user.name}">Hi, User</span>
+        <a th:href="@{/logout}" class="btn-logout btn-sm" id="m-nav-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+</div>
+
+<script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const btn  = document.getElementById('hamburger-btn');
+        menu.classList.toggle('open');
+        btn.classList.toggle('active');
+    }
+    // Close mobile menu on outside click
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('mobile-menu');
+        const btn  = document.getElementById('hamburger-btn');
+        const nav  = document.getElementById('main-navbar');
+        if (menu && menu.classList.contains('open') && !nav.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove('open');
+            btn && btn.classList.remove('active');
+        }
+    });
+</script>
+</th:block>
+</html>

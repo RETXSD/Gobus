@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ── Shared <head> for admin (reuse same head fragment) ── -->
+<head th:fragment="admin-head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} + ' — GoBus Admin'">GoBus Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+
+<!-- ── Admin Sidebar ── -->
+<th:block th:fragment="sidebar(user)">
+<aside class="admin-sidebar" id="admin-sidebar">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+        <span class="sidebar-brand-icon"><i class="fa-solid fa-bus"></i></span>
+        <div class="sidebar-brand-text">
+            <span class="sidebar-brand-name">Go<span class="sidebar-brand-accent">Bus</span></span>
+            <span class="sidebar-brand-role">Admin Panel</span>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="sidebar-nav">
+        <span class="sidebar-nav-label">Menu</span>
+
+        <a th:href="@{/admin/dashboard}" class="sidebar-link" id="sl-dashboard">
+            <span class="sidebar-link-icon"><i class="fa-solid fa-chart-simple"></i></span>
+            <span>Dashboard</span>
+        </a>
+        <a th:href="@{/admin/bus/form}" class="sidebar-link" id="sl-bus">
+            <span class="sidebar-link-icon"><i class="fa-solid fa-bus"></i></span>
+            <span>Add Bus</span>
+        </a>
+        <a th:href="@{/admin/jadwal/form}" class="sidebar-link" id="sl-jadwal">
+            <span class="sidebar-link-icon"><i class="fa-solid fa-calendar-plus"></i></span>
+            <span>Add Schedule</span>
+        </a>
+        <a th:href="@{/admin/tiket}" class="sidebar-link" id="sl-tiket">
+            <span class="sidebar-link-icon"><i class="fa-solid fa-ticket"></i></span>
+            <span>Check Trips</span>
+        </a>
+    </nav>
+
+    <!-- Spacer -->
+    <div class="sidebar-spacer"></div>
+
+    <!-- User Footer -->
+    <div class="sidebar-footer" th:if="${user != null}">
+        <div class="sidebar-avatar">
+            <span class="sidebar-avatar-initial"
+                  th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">A</span>
+        </div>
+        <div class="sidebar-user-info">
+            <span class="sidebar-user-name" th:text="${user.name}">Admin</span>
+            <span class="sidebar-user-role">Administrator</span>
+        </div>
+        <a th:href="@{/logout}" class="sidebar-logout-btn" id="sl-logout" title="Logout"><i class="fa-solid fa-power-off"></i></a>
+    </div>
+</aside>
+
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- Mobile toggle button -->
+<button class="sidebar-toggle" id="sidebar-toggle-btn" onclick="toggleSidebar()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+</button>
+
+<script>
+    // Active link highlight based on URL
+    (function() {
+        const path = window.location.pathname;
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            if (path === link.getAttribute('href') || path.startsWith(link.getAttribute('href').split('?')[0])) {
+                link.classList.add('active');
+            }
+        });
+    })();
+
+    function toggleSidebar() {
+        document.getElementById('admin-sidebar').classList.toggle('open');
+        document.getElementById('sidebar-overlay').classList.toggle('visible');
+    }
+    function closeSidebar() {
+        document.getElementById('admin-sidebar').classList.remove('open');
+        document.getElementById('sidebar-overlay').classList.remove('visible');
+    }
+</script>
+</th:block>
+</html>
