@@ -107,13 +107,45 @@ public class ScheduleDAO {
     }
 
     public void delete(Long id) {
-        String sql = "DELETE FROM schedule WHERE id=?";
-        try (Connection conn = dbUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            ps.executeUpdate();
+        String deleteNotificationsSql = """
+            DELETE n
+            FROM notification n
+            JOIN booking bk ON n.booking_id = bk.id
+            WHERE bk.schedule_id = ?
+            """;
+        String deleteBookingSeatsSql = """
+            DELETE bs
+            FROM booking_seat bs
+            JOIN booking bk ON bs.booking_id = bk.id
+            WHERE bk.schedule_id = ?
+            """;
+        String deleteBookingsSql = "DELETE FROM booking WHERE schedule_id = ?";
+        String deleteScheduleSql = "DELETE FROM schedule WHERE id = ?";
+
+        try (Connection conn = dbUtil.getConnection()) {
+            conn.setAutoCommit(false);
+
+            try {
+                executeDelete(conn, deleteNotificationsSql, id);
+                executeDelete(conn, deleteBookingSeatsSql, id);
+                executeDelete(conn, deleteBookingsSql, id);
+                executeDelete(conn, deleteScheduleSql, id);
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting schedule", e);
+        }
+    }
+
+    private void executeDelete(Connection conn, String sql, Long id) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            ps.executeUpdate();
         }
     }
 
